@@ -1,0 +1,8 @@
+# data
+data/
+
+# mac stuff
+.DS_Store
+
+# projects stuff
+.idea
