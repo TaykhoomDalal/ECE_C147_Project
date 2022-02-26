@@ -1,5 +1,7 @@
-# data
+# project specific stuff
 data/
+__pycache__/
+plots/
 
 # mac stuff
 .DS_Store
