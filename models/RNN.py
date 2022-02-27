@@ -15,7 +15,7 @@ class SimpleRNN(nn.Module):
         """
         super(SimpleRNN, self).__init__()
         self.rnn = nn.RNN(input_size=input_size, hidden_size=hidden_size, num_layers=num_layers, nonlinearity='relu',
-                          **kwargs)
+                          batch_first=True, **kwargs)
         self.linear = nn.Linear(hidden_size, num_classes)
 
     def forward(self, x):
