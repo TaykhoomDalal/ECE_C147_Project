@@ -14,7 +14,7 @@ class SimpleRNN(nn.Module):
         :param num_layers: The number of layers in the RNN
         """
         super(SimpleRNN, self).__init__()
-        self.rnn = nn.RNN(input_size=input_size, hidden_size=hidden_size, num_layers=num_layers, non_linearity='relu',
+        self.rnn = nn.RNN(input_size=input_size, hidden_size=hidden_size, num_layers=num_layers, nonlinearity='relu',
                           **kwargs)
         self.linear = nn.Linear(hidden_size, num_classes)
 
