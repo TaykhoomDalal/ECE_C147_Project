@@ -36,8 +36,8 @@ class SimpleLSTM(nn.Module):
         """
         super(SimpleLSTM, self).__init__()
         self.conv1 = nn.Conv1d(22, 22, kernel_size=5, stride=5)
-        self.lstm1 = nn.LSTM(input_size=22, hidden_size=50, num_layers=2)
-        self.lstm2 = nn.LSTM(input_size=50, hidden_size=25, num_layers=2)
+        self.lstm1 = nn.LSTM(input_size=22, hidden_size=50, num_layers=2, batch_first=True)
+        self.lstm2 = nn.LSTM(input_size=50, hidden_size=25, num_layers=2, batch_first=True)
         self.linear = nn.Linear(in_features=25, out_features=4)
 
     def forward(self, x):
