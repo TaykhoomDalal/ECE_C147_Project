@@ -27,17 +27,14 @@ def main():
     writer = SummaryWriter(os.path.join(args.log_root, log_name))
 
     # transforms and online data augmentation
-    transform_train = transforms.Compose([
-        transforms.ToTensor(),
-    ])
-    transform_test = transforms.Compose([
-        transforms.ToTensor(),
-    ])
+    transform_train = None
+    transform_test = None
 
     # load dataset
     data = load_data(args.dataset_root)
-    train_dataset = NpDataset(data['X_train_valid'], data['y_train_valid'], transform=transform_train)
-    test_dataset = NpDataset(data['X_test'], data['y_test'], transform=transform_test)
+    train_dataset = NpDataset(data['X_train_valid'], data['y_train_valid'], transform=transform_train,
+                              store_as_tensor=True)
+    test_dataset = NpDataset(data['X_test'], data['y_test'], transform=transform_test, store_as_tensor=True)
 
     # dataloaders
     train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers,
