@@ -34,6 +34,13 @@ def main():
     # load dataset
     data = load_data(args.dataset_root)
 
+    # data is channels last by default (n, l, c)
+    # conv nets need channels first ie (n, c, l)
+    # optionally flip channels here
+    if args.channels_first:
+        data['X_train_valid'] = np.transpose(data['X_train_valid'], axes=(0, 2, 1))
+        data['X_test'] = np.transpose(data['X_test'], axes=(0, 2, 1))
+
     # create target to index mapping
     unique_targets = np.unique(data['y_train_valid'])
     offset = np.min(unique_targets)

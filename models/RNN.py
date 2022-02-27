@@ -24,8 +24,6 @@ class SimpleRNN(nn.Module):
         x, _ = self.rnn(x)
         # look at hidden state at last time step
         x = x[:, -1, :]
-        # batchnorm
-        x = self.bn(x)
         x = F.relu(x)
         x = self.linear(x)
         return x
