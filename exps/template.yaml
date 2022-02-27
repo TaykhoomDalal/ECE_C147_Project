@@ -17,6 +17,7 @@ epochs: 120
 
 # run options
 gpu: 0
+no_gpu: false
 model: "SimpleRNN"
 dataset_root: "data/normalized/"
 num_workers: 8

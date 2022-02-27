@@ -17,7 +17,7 @@ def main():
     args.pin_memory = not args.no_memory_pinning
 
     # get device
-    if torch.cuda.is_available():
+    if torch.cuda.is_available() and not args.no_gpu:
         device = f'cuda:{args.gpu}'
     else:
         device = None
