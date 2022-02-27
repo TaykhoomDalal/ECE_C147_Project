@@ -40,9 +40,9 @@ class SimpleLSTM(nn.Module):
         self.linear = nn.Linear(in_features=25, out_features=4)
 
     def forward(self, x):
-        x, _, _ = self.lstm1(x)
+        x, _ = self.lstm1(x)
         x = F.relu(x)
-        x, _, _ = self.lstm2(x)
+        x, _ = self.lstm2(x)
         x = F.relu(x)
         x = x[:, -1, :]
         x = self.linear(x)
