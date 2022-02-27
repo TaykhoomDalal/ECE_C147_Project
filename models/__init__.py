@@ -1,1 +1,1 @@
-from .RNN import SimpleRNN
+from .RNN import SimpleRNN as simplernn
