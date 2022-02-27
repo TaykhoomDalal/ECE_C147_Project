@@ -32,14 +32,18 @@ class SimpleRNN(nn.Module):
 class SimpleLSTM(nn.Module):
     def __init__(self):
         """
-        A Simple LSTM model.
+        A Simple LSTM model with a conv-filter.
         """
         super(SimpleLSTM, self).__init__()
+        self.conv1 = nn.Conv1d(22, 22, kernel_size=5, stride=5)
         self.lstm1 = nn.LSTM(input_size=22, hidden_size=50, num_layers=2)
         self.lstm2 = nn.LSTM(input_size=50, hidden_size=25, num_layers=2)
         self.linear = nn.Linear(in_features=25, out_features=4)
 
     def forward(self, x):
+        x = x.transpose(1, 2)
+        x = self.conv1(x)
+        x = x.transpose(1, 2)
         x, _ = self.lstm1(x)
         x = F.relu(x)
         x, _ = self.lstm2(x)
