@@ -20,8 +20,9 @@ gpu: 0
 no_gpu: false
 model: "SimpleRNN"
 dataset_root: "data/normalized/"
-num_workers: 8
+num_workers: 4
 no_memory_pinning: false
+
 
 # misc options
 log_root: "logs/"
