@@ -1,6 +1,7 @@
 ---
 # optimizer options
 batch_size: 128
+optimizer: 'SGD'
 learning_rate: 0.1
 momentum: 0.9
 l2_reg: 0.0001
@@ -13,23 +14,16 @@ lr_gamma: 0.1
 
 # training options
 epochs: 120
-use_subset: false
-subset_size: 0.1
-create_minority: false
-minority_class: 0
-minority_ratio: 0.1
 
 # run options
 gpu: 0
-model: "resnet32"
-dataset: "CIFAR10"
+model: "SimpleRNN"
+dataset_root: "data/normalized/"
 num_workers: 8
 no_memory_pinning: false
 
 # misc options
-data_root: "data/"
 log_root: "logs/"
 run_name: "template"
-show_figs: false
 
 

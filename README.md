@@ -10,4 +10,4 @@ Papers to read:
 
 First, create a data folder `data/` and download `project_data.zip` and extract it to `data/`.  Next, run `python process_data.py` from this directory.
 
-To load the data, use the `load_data()` function in `utils.py`.  It provides a dict with all of the data in it.
+To load the data, use the `load_data()` function in `utils.py`.  It provides a dict with all the data in it.
