@@ -34,6 +34,7 @@ class SimpleLSTM(nn.Module):
         """
         A Simple LSTM model.
         """
+        super(SimpleLSTM, self).__init__()
         self.lstm1 = nn.LSTM(input_size=22, hidden_size=50, num_layers=2)
         self.lstm2 = nn.LSTM(input_size=50, hidden_size=25, num_layers=2)
         self.linear = nn.Linear(in_features=25, out_features=4)
