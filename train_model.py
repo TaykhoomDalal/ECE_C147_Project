@@ -1,3 +1,4 @@
+import numpy as np
 import torch
 import torch.nn as nn
 from utils import parse_args_with_config, load_data
@@ -32,9 +33,14 @@ def main():
 
     # load dataset
     data = load_data(args.dataset_root)
-    train_dataset = NpDataset(data['X_train_valid'], data['y_train_valid'], transform=transform_train,
+
+    # create target to index mapping
+    unique_targets = np.unique(data['y_train_valid'])
+    offset = np.min(unique_targets)
+
+    train_dataset = NpDataset(data['X_train_valid'], data['y_train_valid'] - offset, transform=transform_train,
                               store_as_tensor=True)
-    test_dataset = NpDataset(data['X_test'], data['y_test'], transform=transform_test, store_as_tensor=True)
+    test_dataset = NpDataset(data['X_test'], data['y_test'] - offset, transform=transform_test, store_as_tensor=True)
 
     # dataloaders
     train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers,
