@@ -1,0 +1,32 @@
+---
+# optimizer options
+batch_size: 128
+optimizer: 'SGD'
+learning_rate: 0.1
+momentum: 0.9
+l2_reg: 0.0001
+
+# lr scheduler options
+lr_milestones:
+  - 80
+  - 100
+lr_gamma: 0.1
+
+# training options
+epochs: 120
+
+# run options
+gpu: 0
+no_gpu: false
+model: "SimpleLSTM"
+dataset_root: "data/normalized/"
+num_workers: 4
+no_memory_pinning: false
+channels_first: false
+
+
+# misc options
+log_root: "logs/"
+run_name: "template"
+
+

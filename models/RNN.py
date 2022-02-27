@@ -27,3 +27,22 @@ class SimpleRNN(nn.Module):
         x = F.relu(x)
         x = self.linear(x)
         return x
+
+
+class SimpleLSTM(nn.Module):
+    def __init__(self):
+        """
+        A Simple LSTM model.
+        """
+        self.lstm1 = nn.LSTM(input_size=22, hidden_size=50, num_layers=2)
+        self.lstm2 = nn.LSTM(input_size=50, hidden_size=25, num_layers=2)
+        self.linear = nn.Linear(in_features=25, out_features=4)
+
+    def forward(self, x):
+        x = self.lstm1(x)
+        x = F.relu(x)
+        x = self.lstm2(x)
+        x = F.relu(x)
+        x = x[:, -1, :]
+        x = self.linear(x)
+        return x
