@@ -35,20 +35,19 @@ class SimpleLSTM(nn.Module):
         A Simple LSTM model with a conv-filter.
         """
         super(SimpleLSTM, self).__init__()
-        self.conv1 = nn.Conv1d(22, 22, kernel_size=5, stride=5)
         self.lstm1 = nn.LSTM(input_size=22, hidden_size=50, num_layers=2, batch_first=True)
-        self.lstm2 = nn.LSTM(input_size=50, hidden_size=25, num_layers=2, batch_first=True)
-        self.linear = nn.Linear(in_features=25, out_features=4)
+        self.lstm2 = nn.LSTM(input_size=50, hidden_size=50, num_layers=2, batch_first=True)
+        self.linear1 = nn.Linear(in_features=50, out_features=50)
+        self.linear2 = nn.Linear(in_features=50, out_features=4)
 
     def forward(self, x):
-        x = x.transpose(1, 2)
-        x = self.conv1(x)
-        x = x.transpose(1, 2)
         x, _ = self.lstm1(x)
         x = F.relu(x)
         x, _ = self.lstm2(x)
         x = F.relu(x)
         x = x[:, -1, :]
-        x = self.linear(x)
+        x = self.linear1(x)
+        x = F.relu(x)
+        x = self.linear2(x)
         return x
 
