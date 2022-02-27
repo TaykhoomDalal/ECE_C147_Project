@@ -15,7 +15,7 @@ class NpDataset(Dataset):
         """
         if store_as_tensor:
             self.X = torch.Tensor(X)
-            self.y = torch.Tensor(y).long()
+            self.y = torch.Tensor(y).int()
         else:
             self.X = X
             self.y = y
