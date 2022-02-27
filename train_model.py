@@ -42,7 +42,7 @@ def main():
         data['X_test'] = np.transpose(data['X_test'], axes=(0, 2, 1))
 
     # optionally reshape the data as a greyscale image
-    if args.as_grayscale:
+    if args.as_greyscale:
         data['X_train_valid'] = data['X_train_valid'][:, np.newaxis, :, :]
         data['X_test'] = data['X_test'][:, np.newaxis, :, :]
 
