@@ -27,6 +27,6 @@ channels_first: true
 
 # misc options
 log_root: "logs/"
-run_name: "template"
+run_name: "simple_cnn"
 
 

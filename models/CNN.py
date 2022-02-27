@@ -91,3 +91,4 @@ class SimpleCNN(nn.Module):
         # head
         x = self.linear(x)
         return x
+
