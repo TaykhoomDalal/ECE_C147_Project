@@ -19,7 +19,7 @@ class SimpleRNN(nn.Module):
         self.linear = nn.Linear(hidden_size, num_classes)
 
     def forward(self, x):
-        x = self.rnn(x)
-        x = F.relu(x)
+        output, h_n = self.rnn(x)
+        x = F.relu(output)
         x = self.linear(x[:, -1, :])
         return x
