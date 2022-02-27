@@ -17,9 +17,14 @@ class SimpleRNN(nn.Module):
         self.rnn = nn.RNN(input_size=input_size, hidden_size=hidden_size, num_layers=num_layers, nonlinearity='relu',
                           batch_first=True, **kwargs)
         self.linear = nn.Linear(hidden_size, num_classes)
+        self.bn = nn.BatchNorm1d(hidden_size)
 
     def forward(self, x):
-        output, h_n = self.rnn(x)
-        x = F.relu(output)
+        # pass through rnn
+        x, _ = self.rnn(x)
+        # look at hidden state at last time step
+        x = x[:, -1, :]
+        # batchnorm
+        x = self.bn(x)
         x = self.linear(x[:, -1, :])
         return x
