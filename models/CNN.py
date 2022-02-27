@@ -59,6 +59,8 @@ class SimpleCNN(nn.Module):
 
         self.m3 = nn.MaxPool1d(2)  # downsampling, max pooling (2) # (B, 10, 100) -> (B, 10, 50)
 
+        # flatten
+
         # linear layer
         self.linear = nn.Linear(10*50, 4)
 
@@ -82,6 +84,9 @@ class SimpleCNN(nn.Module):
         # third block
         x = self.b3(x)
         x = self.m3(x)
+
+        # flatten
+        x = torch.flatten(x, start_dim=1)
 
         # head
         x = self.linear(x)
