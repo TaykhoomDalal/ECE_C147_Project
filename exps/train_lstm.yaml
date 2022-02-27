@@ -27,6 +27,6 @@ channels_first: false
 
 # misc options
 log_root: "logs/"
-run_name: "template"
+run_name: "simple_lstm"
 
 
