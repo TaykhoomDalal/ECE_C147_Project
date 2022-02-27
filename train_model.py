@@ -36,7 +36,7 @@ def main():
 
     # load dataset
     data = load_data(args.dataset_root)
-    train_dataset = NpDataset(data['X_train_valid', data['y_train_valid']], transform=transform_train)
+    train_dataset = NpDataset(data['X_train_valid'], data['y_train_valid'], transform=transform_train)
     test_dataset = NpDataset(data['X_test'], data['y_test'], transform=transform_test)
 
     # dataloaders
