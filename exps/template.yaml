@@ -23,6 +23,7 @@ dataset_root: "data/normalized/"
 num_workers: 4
 no_memory_pinning: false
 channels_first: false
+as_greyscale: false
 
 
 # misc options
