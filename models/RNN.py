@@ -26,5 +26,6 @@ class SimpleRNN(nn.Module):
         x = x[:, -1, :]
         # batchnorm
         x = self.bn(x)
-        x = self.linear(x[:, -1, :])
+        x = F.relu(x)
+        x = self.linear(x)
         return x
