@@ -25,6 +25,10 @@ no_memory_pinning: false
 channels_first: false
 as_greyscale: false
 
+# experimental options
+subsampling: false
+subsample_size: 100
+
 
 # misc options
 log_root: "logs/"

@@ -46,6 +46,20 @@ def main():
         data['X_train_valid'] = data['X_train_valid'][:, np.newaxis, :, :]
         data['X_test'] = data['X_test'][:, np.newaxis, :, :]
 
+    if args.subsampling:
+        n, seq_len, n_features = data['X_train_valid'].shape
+        subsamp_filter = seq_len // args.subsample_size
+        data['X_train_valid'] = data['X_train_valid'].reshape(n, args.subsample_size, subsamp_filter,
+                                                              n_features)
+        n, seq_len, n_features = data['X_test'].shape
+        data['X_test'] = data['X_test'].reshape(n, args.subsample_size, subsamp_filter, n_features)
+
+        def sample(x):
+            s = np.random.choice(subsamp_filter, size=subsamp_filter)
+            return x[:, np.arange(args.subsample_size), s, :]
+
+        transform_train = sample
+
     # create target to index mapping
     unique_targets = np.unique(data['y_train_valid'])
     offset = np.min(unique_targets)
