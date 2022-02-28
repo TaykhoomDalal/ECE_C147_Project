@@ -20,3 +20,30 @@ def subsample(X, sub=5):
       out_idx = out_idx + 1
   
   return out
+
+def normalize(x):
+    xNorm = np.zeros_like(x)
+    #Get max and mins across all channels through trials and time bins
+    trainMaxofChannels = np.max(x, axis=(-1, -3))
+    trainMaxofChannels = trainMaxofChannels.reshape((22,1))
+    trainMinofChannels = np.min(x, axis=(-1, -3))
+    trainMinofChannels = trainMinofChannels.reshape((22,1))
+    minMaxofChannels = trainMaxofChannels - trainMinofChannels
+    # Use prevoius Values to calculate Min Max Normalization
+    # Normalizing across each trial
+    for i in range(x.shape[0]):
+        xNorm[i] = x[i] - trainMinofChannels)/(trainMaxofChannels - trainMinofChannels)
+    return xNorm
+
+def standardize(x):
+    xStand = np.zeros_like(x)
+    #Get Mean and StDev across all channels through trials and time bins
+    trainChannelMean = np.mean(X_train, axis=(-1, -3))
+    trainChannelMean = trainChannelMean.reshape((22,1))
+    trainChannelStd = np.std(X_train, axis=(-1, -3))
+    trainChannelStd = trainChannelStd.reshape((22,1))
+    # Use prevoius Values to standardize
+    # Standardize across each trial
+    for i in range(x.shape[0]):
+        xStand[i] = x[i] - trainChannelMean)/trainChannelStd
+    return xStand
