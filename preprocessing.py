@@ -32,7 +32,7 @@ def normalize(x):
     # Use prevoius Values to calculate Min Max Normalization
     # Normalizing across each trial
     for i in range(x.shape[0]):
-        xNorm[i] = x[i] - trainMinofChannels)/(trainMaxofChannels - trainMinofChannels)
+        xNorm[i] = (x[i] - trainMinofChannels)/(trainMaxofChannels - trainMinofChannels)
     return xNorm
 
 def standardize(x):
@@ -45,5 +45,5 @@ def standardize(x):
     # Use prevoius Values to standardize
     # Standardize across each trial
     for i in range(x.shape[0]):
-        xStand[i] = x[i] - trainChannelMean)/trainChannelStd
+        xStand[i] = (x[i] - trainChannelMean)/trainChannelStd
     return xStand
