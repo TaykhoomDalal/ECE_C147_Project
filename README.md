@@ -19,3 +19,11 @@ To train a model, run `python train_model.py`.  By default, this will use the co
 
 All options in the config can be overwritten via command line arguments.  To use a different learning rate for example, use
 `python train_model.py --learning_rate 0.001`.
+
+## Papers on Data Augmentation:
+
+[Data Augmentation for Deep Neural Networks Model in EEG Classification Task: A Review](https://www.frontiersin.org/articles/10.3389/fnhum.2021.765525/full)
+
+[Data augmentation for self-paced motor imagery classification with C-LSTM](https://iopscience.iop.org/article/10.1088/1741-2552/ab57c0)
+
+[Data Augmentation for Deep-Learning-Based Electroencephalography](https://authors.library.caltech.edu/104903/1/DataAugmentationForDeepLearningBasedEeg.pdf)
