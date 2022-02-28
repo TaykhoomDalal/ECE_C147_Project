@@ -59,6 +59,7 @@ def main():
             return x[np.arange(args.subsample_size), s]
 
         transform_train = sample
+        transform_test = sample
 
     # create target to index mapping
     unique_targets = np.unique(data['y_train_valid'])
