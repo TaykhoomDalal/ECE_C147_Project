@@ -1,16 +1,16 @@
 import numpy as np
 
-def gaussian_noise(X, mean, std) -> np.ndarray:
+def gaussian_noise(x, mean, std) -> np.ndarray:
     '''
     Add gaussian noise to the training data
     '''
-    return X + np.random.normal(loc=mean, scale=std, size=X.shape)
+    return x + np.random.normal(loc=mean, scale=std, size=X.shape)
 
-def trim_time(X, start_time, end_time) -> np.ndarray:
+def trim_time(x, start_time, end_time) -> np.ndarray:
     '''
     Return trimmed subset of time-steps
     '''
-    return X[:, start_time:end_time, :]
+    return x[:, start_time:end_time, :]
 
 #***************************************************************************************
 #    Title: utils/augmentation.py
