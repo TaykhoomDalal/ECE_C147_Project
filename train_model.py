@@ -55,8 +55,8 @@ def main():
         data['X_test'] = data['X_test'].reshape(n, args.subsample_size, subsamp_filter, n_features)
 
         def sample(x):
-            s = np.random.choice(subsamp_filter, size=subsamp_filter)
-            return x[np.arange(args.subsample_size), s, :]
+            s = np.random.choice(subsamp_filter, size=args.subsample_size)
+            return x[np.arange(args.subsample_size), s]
 
         transform_train = sample
 
