@@ -56,7 +56,7 @@ def main():
 
         def sample(x):
             s = np.random.choice(subsamp_filter, size=subsamp_filter)
-            return x[:, np.arange(args.subsample_size), s, :]
+            return x[np.arange(args.subsample_size), s, :]
 
         transform_train = sample
 
