@@ -7,6 +7,7 @@ Papers to read:
 [EEGNet: a compact convolutional neural network for EEG-based brain–computer interfaces](https://arxiv.org/pdf/1611.08024.pdf)
 
 Papers on Data Augmentation:
+
 [Data Augmentation for Deep Neural Networks Model in EEG Classification Task: A Review](https://www.frontiersin.org/articles/10.3389/fnhum.2021.765525/full)
 
 [Data augmentation for self-paced motor imagery classification with C-LSTM](https://iopscience.iop.org/article/10.1088/1741-2552/ab57c0)
