@@ -28,15 +28,16 @@ as_greyscale: false
 # experimental options
 subsampling: false
 subsample_size: 100
+no_clipping: false
 
 # dataset one-shot preprocessing options
 # size of window to average sequences over
-temp_ds_wnd: 10
+temp_ds_wnd: 4
 
 # dataset options
-seq_len: 20
-stride: 2
-sequential_targets: true
+seq_len: 125
+stride: 1
+sequential_targets: false
 
 
 # misc options

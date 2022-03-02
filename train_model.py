@@ -34,6 +34,11 @@ def main():
     # load dataset
     data = load_data(args.dataset_root)
 
+    # clip data to first 500
+    if not args.no_clipping:
+        data['X_train_valid'] = data['X_train_valid'][:, :500, :]
+        data['X_test'] = data['X_test'][:, :500, :]
+
     # data is channels last by default (n, l, c)
     # conv nets need channels first ie (n, c, l)
     # optionally flip channels here
