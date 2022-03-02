@@ -58,7 +58,7 @@ class LSTM(nn.Module):
         A more refined LSTM model.
         """
         self.dropout = dropout
-        self.sequential_targets=sequential_ouputs
+        self.sequential_targets=sequential_outputs
 
         super(LSTM, self).__init__()
         self.lstm1 = nn.LSTM(input_size=22, hidden_size=64, dropout=dropout, batch_first=True)
