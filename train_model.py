@@ -80,13 +80,11 @@ def main():
     for e in range(args.epochs):
         # train
         model.train()
-        train_loss, train_acc = train(model, criterion, optimizer, train_loader, e, device=device,
-                                      sequential_targets=args.sequential_targets)
+        train_loss, train_acc = train(model, criterion, optimizer, train_loader, e, device=device)
 
         # validate
         model.eval()
-        val_loss, val_acc = validate(model, criterion, test_loader, e, device=device,
-                                     sequential_targets=args.sequential_targets)
+        val_loss, val_acc = validate(model, criterion, test_loader, e, device=device)
 
         # update learning rate
         lr_scheduler.step()
