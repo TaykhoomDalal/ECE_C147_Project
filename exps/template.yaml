@@ -23,23 +23,13 @@ model: "LSTM"
 dataset_root: "data/normalized/"
 num_workers: 4
 no_memory_pinning: false
-channels_first: false
-as_greyscale: false
 
 # experimental options
-subsampling: false # only compatible with np dataset
-subsample_size: 100
-no_clipping: false
-np_dataset: false
+clipping: true
+wndsze: 2
+sample_type: 'stratified'
+sample_size: 125
 
-# dataset one-shot preprocessing options
-# size of window to average sequences over
-temp_ds_wnd: 4
-
-# dataset options sequential dataset only
-seq_len: 125
-stride: 1
-sequential_targets: false
 
 
 # misc options

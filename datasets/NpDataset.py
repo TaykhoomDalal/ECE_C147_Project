@@ -94,3 +94,80 @@ class SequentialNpDataset(Dataset):
             return x, y, index
         else:
             return x, y
+
+
+class PreprocessedNpDataset(Dataset):
+    def __init__(self, X: np.ndarray, y: np.ndarray, wndsze=1, clipping=False, sample_size=100,
+                 sample_type='stratified', transform=None, target_transform=None, store_as_tensor=False):
+        """
+        A np dataset with common prepocessing functions.
+
+        :param X: input ndarray of shape N, L, H
+        :param y: target ndarray of shape N,
+        :param wndsze: window size for temporal preprocessing (ie average every 2 points)
+        :param clipping: optionally cut the dataset in half
+        :param sample_size: random sample size from the dataset
+        :param sample_type type of sample. 'stratified' for sample every few points, 'random' for a random sample from
+            the sequence. 'none' for no sampling
+        :param transform: transform to be applied to the feature vectors
+        :param target_transform: transform to be applied to targets (y)
+        :param store_as_tensor: store as a pytorch tensor
+        """
+        self.store_as_tensor = store_as_tensor
+        if store_as_tensor:
+            self.X = torch.Tensor(X)
+            self.y = torch.Tensor(y)
+        else:
+            self.X = X
+            self.y = y
+        self.wndsze = wndsze
+        self.clipping = clipping
+        self.sample_size = sample_size
+        self.sample_type = sample_type
+        self.transform = transform
+        self.target_transform = target_transform
+
+        # first, clipping
+        if clipping:
+            N, L, H = self.X.shape
+            self.X = self.X[:, :L, :]
+
+        # next, temporal averaging
+        N, L, H = self.X.shape
+        X = self.X.reshape(N, int(L // wndsze), int(wndsze), H)
+        self.X = X.mean(axis=2)
+
+    def __len__(self):
+        return len(self.y)
+
+    def __getitem__(self, index):
+        # load x and y
+        x, y = self.X[index], self.y[index]
+
+        # take a sample
+        if self.sample_type == "stratified":
+            L, H = x.shape
+            L2 = int(L // self.sample_size)
+            x = x.reshape(L2, self.sample_size, H)
+            s = np.random.choice(self.sample_size, size=L2)
+            x = x[np.arange(L2), s]
+        elif self.sample_type == "random":
+            L, H = x.shape
+            s = np.random.choice(L, size=self.sample_size, replace=False)
+            s.sort()
+            x = x[s]
+        elif self.sample_type == "none":
+            # do nothing
+            pass
+        else:
+            raise NotImplementedError("unknown sample type")
+
+        # transform
+        if self.transform is not None:
+            x = self.transform(x)
+        # target transform
+        if self.target_transform is not None:
+            y = self.target_transform(y)
+
+        return x, y
+

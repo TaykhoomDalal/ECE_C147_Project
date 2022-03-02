@@ -2,7 +2,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 from utils import parse_args_with_config, load_data
-from datasets import NpDataset, SequentialNpDataset
+from datasets import NpDataset, SequentialNpDataset, PreprocessedNpDataset
 import models
 from torch.utils.tensorboard import SummaryWriter
 import time
@@ -34,69 +34,19 @@ def main():
     # load dataset
     data = load_data(args.dataset_root)
 
-    # clip data to first 500
-    if not args.no_clipping:
-        data['X_train_valid'] = data['X_train_valid'][:, :500, :]
-        data['X_test'] = data['X_test'][:, :500, :]
-
-    # data is channels last by default (n, l, c)
-    # conv nets need channels first ie (n, c, l)
-    # optionally flip channels here
-    if args.channels_first:
-        data['X_train_valid'] = np.transpose(data['X_train_valid'], axes=(0, 2, 1))
-        data['X_test'] = np.transpose(data['X_test'], axes=(0, 2, 1))
-
-    # optionally reshape the data as a greyscale image
-    if args.as_greyscale:
-        data['X_train_valid'] = data['X_train_valid'][:, np.newaxis, :, :]
-        data['X_test'] = data['X_test'][:, np.newaxis, :, :]
-
-    if args.subsampling:
-        n, seq_len, n_features = data['X_train_valid'].shape
-        subsamp_filter = seq_len // args.subsample_size
-        data['X_train_valid'] = data['X_train_valid'].reshape(n, args.subsample_size, subsamp_filter,
-                                                              n_features)
-        n, seq_len, n_features = data['X_test'].shape
-        data['X_test'] = data['X_test'].reshape(n, args.subsample_size, subsamp_filter, n_features)
-
-        def sample(x):
-            s = np.random.choice(subsamp_filter, size=args.subsample_size)
-            return x[np.arange(args.subsample_size), s]
-
-        transform_train = sample
-        transform_test = sample
-
-    # perform temporal averaging to offset noise
-    if args.temp_ds_wnd > 1:
-        _, seq_len, n_features = data['X_train_valid'].shape
-        new_seq_len = int(seq_len // args.temp_ds_wnd)
-        data['X_train_valid'] = data['X_train_valid'].reshape(-1, new_seq_len, args.temp_ds_wnd, n_features)
-        data['X_train_valid'] = np.sum(data['X_train_valid'], axis=2) / args.temp_ds_wnd
-        data['X_test'] = data['X_test'].reshape(-1, new_seq_len, args.temp_ds_wnd, n_features)
-        data['X_test'] = np.sum(data['X_test'], axis=2) / args.temp_ds_wnd
-
-
     # create target to index mapping
     unique_targets = np.unique(data['y_train_valid'])
     offset = np.min(unique_targets)
-
-    # scale targets
     data['y_train_valid'] = data['y_train_valid'] - offset
     data['y_test'] = data['y_test'] - offset
 
-    # use sequential datasets
-    if args.np_dataset:
-        train_dataset = NpDataset(data['X_train_valid'], data['y_train_valid'], transform=transform_train,
-                                  store_as_tensor=True)
-        test_dataset = NpDataset(data['X_test'], data['y_test'], transform=transform_test,
-                                 store_as_tensor=True)
-    else:
-        train_dataset = SequentialNpDataset(data['X_train_valid'], data['y_train_valid'], args.seq_len, args.stride,
-                                            transform=transform_train, store_as_tensor=True,
-                                            sequential_targets=args.sequential_targets)
-        test_dataset = SequentialNpDataset(data['X_test'], data['y_test'], args.seq_len, args.stride,
-                                           transform=transform_test, store_as_tensor=True,
-                                           sequential_targets=args.sequential_targets)
+    # datasets
+    train_dataset = PreprocessedNpDataset(data['X_train_valid'], data['y_train_valid'], wndsze=args.wndsze,
+                                          clipping=args.clipping, sample_size=args.sample_size,
+                                          sample_type=args.sample_type)
+    test_dataset = PreprocessedNpDataset(data['X_test'], data['y_test'], wndsze=args.wndsze,
+                                          clipping=args.clipping, sample_size=args.sample_size,
+                                          sample_type=args.sample_type)
 
     # dataloaders
     train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers,
