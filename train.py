@@ -3,7 +3,7 @@ import torch
 import numpy as np
 
 
-def train(model, criterion, optimizer, train_loader, epoch, device=None):
+def train(model, criterion, optimizer, train_loader, epoch, device=None, sequential_targets=False):
     """
     Trains a model for a single epoch.
 
@@ -13,6 +13,7 @@ def train(model, criterion, optimizer, train_loader, epoch, device=None):
     :param train_loader: The training dataset dataloader
     :param epoch: the current epoch (used for tqdm)
     :param device: the device to move the data.  If none, no data moving will occur
+    :param sequential_targets: True if out is size (batch, seq, class) and targets are of size (batch, seq)
     :return: train loss, train acc
     """
     # stats
@@ -33,7 +34,13 @@ def train(model, criterion, optimizer, train_loader, epoch, device=None):
 
         # forward pass
         out = model.forward(batch_x)
-        loss = criterion(out, batch_y).mean()
+        if sequential_targets:
+            loss = criterion(out[:, 0, :], batch_y[:, 0])
+            seq_len = len(out[0])
+            for i in range(1, seq_len):
+                loss += criterion(out[:, i, :], batch_y[:, i]).mean()
+        else:
+            loss = criterion(out, batch_y).mean()
 
         # backward pass
         loss.backward()
@@ -42,7 +49,11 @@ def train(model, criterion, optimizer, train_loader, epoch, device=None):
         # collect stats
         batch_size = len(batch_y)
         running_loss += loss.item() * batch_size
-        n_correct = torch.sum(out.argmax(dim=-1) == batch_y).item()
+        if sequential_targets:
+            # if sequential we only care about the last time step
+            n_correct = torch.sum(out[:, -1, :].argmax(dim=-1) == batch_y[:, -1]).item()
+        else:
+            n_correct = torch.sum(out.argmax(dim=-1) == batch_y).item()
         running_correct += n_correct
         running_examples += batch_size
 
@@ -57,7 +68,7 @@ def train(model, criterion, optimizer, train_loader, epoch, device=None):
 
     return running_loss / running_examples, running_correct / running_examples
 
-def validate(model, criterion, test_loader, epoch, device=None):
+def validate(model, criterion, test_loader, epoch, device=None, sequential_targets=False):
     """
     Computes the accuracy and loss without updating the model.
 
@@ -88,12 +99,22 @@ def validate(model, criterion, test_loader, epoch, device=None):
 
             # forward pass
             out = model.forward(batch_x)
-            loss = criterion(out, batch_y).mean()
+            if sequential_targets:
+                loss = criterion(out[:, 0, :], batch_y[:, 0])
+                seq_len = len(out[0])
+                for i in range(1, seq_len):
+                    loss += criterion(out[:, i, :], batch_y[:, i]).mean()
+            else:
+                loss = criterion(out, batch_y).mean()
 
             # collect stats
             batch_size = len(batch_y)
             running_loss += loss.item() * batch_size
-            n_correct = torch.sum(out.argmax(dim=-1) == batch_y).item()
+            if sequential_targets:
+                # if sequential we only care about the last time step
+                n_correct = torch.sum(out[:, -1, :].argmax(dim=-1) == batch_y[:, -1]).item()
+            else:
+                n_correct = torch.sum(out.argmax(dim=-1) == batch_y).item()
             running_correct += n_correct
             running_examples += batch_size
 

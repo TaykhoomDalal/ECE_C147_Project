@@ -81,9 +81,11 @@ def main():
 
     # use sequential datasets
     train_dataset = SequentialNpDataset(data['X_train_valid'], data['y_train_valid'], args.seq_len, args.stride,
-                                        transform=transform_train, store_as_tensor=True)
+                                        transform=transform_train, store_as_tensor=True,
+                                        sequential_targets=args.sequential_targets)
     test_dataset = SequentialNpDataset(data['X_test'], data['y_test'], args.seq_len, args.stride,
-                                       transform=transform_test, store_as_tensor=True)
+                                       transform=transform_test, store_as_tensor=True,
+                                       sequential_targets=args.sequential_targets)
 
     # dataloaders
     train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers,
@@ -117,11 +119,13 @@ def main():
     for e in range(args.epochs):
         # train
         model.train()
-        train_loss, train_acc = train(model, criterion, optimizer, train_loader, e, device=device)
+        train_loss, train_acc = train(model, criterion, optimizer, train_loader, e, device=device,
+                                      sequential_targets=args.sequential_targets)
 
         # validate
         model.eval()
-        val_loss, val_acc = validate(model, criterion, test_loader, e, device=device)
+        val_loss, val_acc = validate(model, criterion, test_loader, e, device=device,
+                                     sequential_targets=args.sequential_targets)
 
         # update learning rate
         lr_scheduler.step()

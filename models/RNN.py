@@ -84,5 +84,6 @@ class LSTM(nn.Module):
         x = F.relu(x)
 
         x = self.linear4(x)
-
         return x
+
+

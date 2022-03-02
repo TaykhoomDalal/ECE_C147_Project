@@ -45,7 +45,7 @@ class NpDataset(Dataset):
 
 class SequentialNpDataset(Dataset):
     def __init__(self, X: np.ndarray, y: np.ndarray, seq_len, stride, transform=None, target_transform=None,
-                 return_indices=False, store_as_tensor=False):
+                 return_indices=False, store_as_tensor=False, sequential_targets=True):
         """
         A dataset wrapper for numpy array style datasets
         :param X: The X data of shape [n_examples, ...]
@@ -64,6 +64,7 @@ class SequentialNpDataset(Dataset):
         self.transform = transform
         self.target_transform = target_transform
         self.return_indices = return_indices
+        self.sequential_targets = sequential_targets
         self.seq_len = seq_len
         self.stride = stride
         self._ex_len = len(X[0])
@@ -77,7 +78,10 @@ class SequentialNpDataset(Dataset):
         offset = index % self._seqs_per_example
 
         x = self.X[ex, offset*self.stride:(offset*self.stride + self.seq_len)]
-        y = self.y[ex].repeat(self.seq_len)
+        if self.sequential_targets:
+            y = self.y[ex].repeat(self.seq_len)
+        else:
+            y = self.y[ex]
 
         # optionally transform data
         if self.transform is not None:

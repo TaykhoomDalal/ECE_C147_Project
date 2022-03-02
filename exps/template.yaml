@@ -36,6 +36,7 @@ temp_ds_wnd: 20
 # dataset options
 seq_len: 20
 stride: 2
+sequential_targets: true
 
 
 # misc options
