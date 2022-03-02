@@ -2,6 +2,13 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+
+def _init_hidden_state(lstm: nn.LSTM, batch_size, device):
+    c0 = torch.zeros(lstm.num_layers, batch_size, lstm.hidden_size, requires_grad=True).to(device)
+    h0 = torch.zeros(lstm.num_layers, batch_size, lstm.hidden_size, requires_grad=True).to(device)
+    return h0, c0
+
+
 class SimpleRNN(nn.Module):
     def __init__(self, input_size=22, hidden_size=10, num_layers=2, num_classes=4, **kwargs):
         """
@@ -54,37 +61,22 @@ class LSTM(nn.Module):
         A more refined LSTM model.
         """
         self.dropout = dropout
-        self.sequential_targets=sequential_outputs
+        self.sequential_targets = sequential_outputs
 
         super(LSTM, self).__init__()
         self.lstm1 = nn.LSTM(input_size=22, hidden_size=64, dropout=dropout, batch_first=True)
-        self.linear1 = nn.Linear(64, 64)
         self.lstm2 = nn.LSTM(input_size=64, hidden_size=64, dropout=dropout, batch_first=True)
-        self.linear2 = nn.Linear(64, 64)
-        self.lstm3 = nn.LSTM(input_size=64, hidden_size=64, dropout=dropout, batch_first=True)
-        self.linear3 = nn.Linear(64, 64)
-        self.linear4 = nn.Linear(64, 4)
+        self.linear = nn.Linear(64, 4)
 
     def forward(self, x):
-        x, _ = self.lstm1(x)
-        x = self.linear1(x)
-        x = F.dropout(x, p=self.dropout)
-        x = F.relu(x)
-
-        x, _ = self.lstm2(x)
-        x = self.linear2(x)
-        x = F.dropout(x, p=self.dropout)
-        x = F.relu(x)
-
-        x, _ = self.lstm3(x)
-        x = self.linear3(x)
-        x = F.dropout(x, p=self.dropout)
-        x = F.relu(x)
-
+        batch_size = len(x)
+        device = x.device
+        hc1 = _init_hidden_state(self.lstm1, batch_size, device)
+        x, _ = self.lstm1(x, hc1)
+        hc2 = _init_hidden_state(self.lstm2, batch_size, device)
+        x, _ = self.lstm2(x, hc2)
         if not self.sequential_targets:
             x = x[:, -1, :]
-
-        x = self.linear4(x)
+        x = self.linear(x)
         return x
-
 
