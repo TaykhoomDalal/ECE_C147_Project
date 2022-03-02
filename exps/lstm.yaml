@@ -34,7 +34,7 @@ np_dataset: true
 
 # dataset one-shot preprocessing options
 # size of window to average sequences over
-temp_ds_wnd: 2
+temp_ds_wnd: 1
 
 # dataset options sequential dataset only
 seq_len: 125
