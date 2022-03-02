@@ -57,11 +57,11 @@ class SimpleLSTM(nn.Module):
 
 
 class LSTM(nn.Module):
-    def __init__(self, args):
+    def __init__(self, dropout):
         """
         A more refined LSTM model.
         """
-        self.dropout = args.dropout
+        self.dropout = dropout
         self.sequential_targets = False
 
         super(LSTM, self).__init__()
