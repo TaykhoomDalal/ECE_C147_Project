@@ -74,8 +74,10 @@ class LSTM(nn.Module):
         device = x.device
         hc1 = _init_hidden_state(self.lstm1, batch_size, device)
         x, _ = self.lstm1(x, hc1)
+        x = F.dropout(x, self.dropout)
         hc2 = _init_hidden_state(self.lstm2, batch_size, device)
         x, _ = self.lstm2(x, hc2)
+        x = F.dropout(x, self.dropout)
         if not self.sequential_targets:
             x = x[:, -1, :]
         x = self.linear(x)
