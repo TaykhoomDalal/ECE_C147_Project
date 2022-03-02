@@ -4,7 +4,7 @@ batch_size: 128
 optimizer: 'SGD'
 learning_rate: 0.1
 momentum: 0.9
-l2_reg: 0.0001
+l2_reg: 0.00001
 
 # lr scheduler options
 lr_milestones:
