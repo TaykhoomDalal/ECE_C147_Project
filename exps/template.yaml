@@ -25,7 +25,7 @@ num_workers: 4
 no_memory_pinning: false
 
 # experimental options
-clipping: true
+no_clipping: false
 wndsze: 2
 sample_type: 'stratified'
 sample_size: 125
