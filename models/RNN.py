@@ -65,8 +65,8 @@ class LSTM(nn.Module):
         self.sequential_targets = False
 
         super(LSTM, self).__init__()
-        self.lstm1 = nn.LSTM(input_size=22, hidden_size=64, dropout=dropout, batch_first=True)
-        self.lstm2 = nn.LSTM(input_size=64, hidden_size=64, dropout=dropout, batch_first=True)
+        self.lstm1 = nn.LSTM(input_size=22, hidden_size=64, num_layers=2, dropout=dropout, batch_first=True)
+        self.lstm2 = nn.LSTM(input_size=64, hidden_size=64, num_layers=2, dropout=dropout, batch_first=True)
         self.linear = nn.Linear(64, 4)
 
     def forward(self, x):
