@@ -67,7 +67,7 @@ class SequentialNpDataset(Dataset):
         self.seq_len = seq_len
         self.stride = stride
         self._ex_len = len(X[0])
-        self._seqs_per_example = (self._ex_len - self.seq_len) / self.stride + 1
+        self._seqs_per_example = int((self._ex_len - self.seq_len) / self.stride + 1)
 
     def __len__(self):
         return len(self.X) * self._seqs_per_example
