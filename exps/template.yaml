@@ -31,10 +31,10 @@ subsample_size: 100
 
 # dataset one-shot preprocessing options
 # size of window to average sequences over
-temp_ds_wnd: 4
+temp_ds_wnd: 20
 
 # dataset options
-seq_len: 100
+seq_len: 20
 stride: 2
 
 
