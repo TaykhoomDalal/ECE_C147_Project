@@ -68,17 +68,17 @@ class LSTM(nn.Module):
         self.linear4 = nn.Linear(64, 4)
 
     def forward(self, x):
-        x, _, _ = self.lstm1(x)
+        x, _ = self.lstm1(x)
         x = self.linear1(x)
         x = F.dropout(x, p=self.dropout)
         x = F.relu(x)
 
-        x, _, _ = self.lstm2(x)
+        x, _ = self.lstm2(x)
         x = self.linear2(x)
         x = F.dropout(x, p=self.dropout)
         x = F.relu(x)
 
-        x, _, _ = self.lstm3(x)
+        x, _ = self.lstm3(x)
         x = self.linear3(x)
         x = F.dropout(x, p=self.dropout)
         x = F.relu(x)
