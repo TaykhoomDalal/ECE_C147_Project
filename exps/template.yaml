@@ -27,15 +27,16 @@ channels_first: false
 as_greyscale: false
 
 # experimental options
-subsampling: false
+subsampling: false # only compatible with np dataset
 subsample_size: 100
 no_clipping: false
+np_dataset: false
 
 # dataset one-shot preprocessing options
 # size of window to average sequences over
 temp_ds_wnd: 4
 
-# dataset options
+# dataset options sequential dataset only
 seq_len: 125
 stride: 1
 sequential_targets: false

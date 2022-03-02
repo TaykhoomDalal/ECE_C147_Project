@@ -4,7 +4,7 @@ batch_size: 128
 optimizer: 'SGD'
 learning_rate: 0.1
 momentum: 0.9
-l2_reg: 0.0001
+l2_reg: 0.00001
 dropout: 0
 
 # lr scheduler options
@@ -27,22 +27,23 @@ channels_first: false
 as_greyscale: false
 
 # experimental options
-subsampling: true
-subsample_size: 200
-no_clipping: true
+subsampling: true # only compatible with np dataset
+subsample_size: 250
+no_clipping: false
+np_dataset: true
 
 # dataset one-shot preprocessing options
 # size of window to average sequences over
-temp_ds_wnd: 1
+temp_ds_wnd: 2
 
-# dataset options
-seq_len: 1000
+# dataset options sequential dataset only
+seq_len: 125
 stride: 1
 sequential_targets: false
 
 
 # misc options
 log_root: "logs/"
-run_name: "lstm"
+run_name: "template"
 
 

@@ -85,12 +85,18 @@ def main():
     data['y_test'] = data['y_test'] - offset
 
     # use sequential datasets
-    train_dataset = SequentialNpDataset(data['X_train_valid'], data['y_train_valid'], args.seq_len, args.stride,
-                                        transform=transform_train, store_as_tensor=True,
-                                        sequential_targets=args.sequential_targets)
-    test_dataset = SequentialNpDataset(data['X_test'], data['y_test'], args.seq_len, args.stride,
-                                       transform=transform_test, store_as_tensor=True,
-                                       sequential_targets=args.sequential_targets)
+    if args.np_dataset:
+        train_dataset = NpDataset(data['X_train_valid'], data['y_train_valid'], transform=transform_train,
+                                  store_as_tensor=True)
+        test_dataset = NpDataset(data['X_test'], data['y_test'], transform=transform_test,
+                                 store_as_tensor=True)
+    else:
+        train_dataset = SequentialNpDataset(data['X_train_valid'], data['y_train_valid'], args.seq_len, args.stride,
+                                            transform=transform_train, store_as_tensor=True,
+                                            sequential_targets=args.sequential_targets)
+        test_dataset = SequentialNpDataset(data['X_test'], data['y_test'], args.seq_len, args.stride,
+                                           transform=transform_test, store_as_tensor=True,
+                                           sequential_targets=args.sequential_targets)
 
     # dataloaders
     train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers,
