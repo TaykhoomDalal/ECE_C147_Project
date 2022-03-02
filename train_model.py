@@ -57,7 +57,7 @@ def main():
                              pin_memory=args.pin_memory)
 
     # create model
-    model = models.__dict__[args.model](args.args)
+    model = models.__dict__[args.model](args.model_args)
     if device is not None:
         model = model.to(device)
 
