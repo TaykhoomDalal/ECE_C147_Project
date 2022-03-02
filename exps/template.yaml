@@ -5,7 +5,6 @@ optimizer: 'SGD'
 learning_rate: 0.1
 momentum: 0.9
 l2_reg: 0.00001
-dropout: 0
 
 # lr scheduler options
 lr_milestones:
@@ -29,6 +28,9 @@ no_clipping: false
 wndsze: 2
 sample_type: 'none'
 sample_size: 125
+
+model_args:
+  dropout: 0.2
 
 
 
