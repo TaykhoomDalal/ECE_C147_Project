@@ -51,3 +51,42 @@ class SimpleLSTM(nn.Module):
         x = self.linear2(x)
         return x
 
+
+class LSTM(nn.Module):
+    def __init__(self, dropout=0):
+        """
+        A more refined LSTM model.
+        """
+        self.dropout = dropout
+        super(LSTM, self).__init__()
+        self.lstm1 = nn.LSTM(input_size=22, hidden_size=64, dropout=dropout, batch_first=True)
+        self.linear1 = nn.Linear(64, 64)
+        self.lstm2 = nn.LSTM(input_size=64, hidden_size=64, dropout=dropout, batch_first=True)
+        self.linear2 = nn.Linear(64, 64)
+        self.lstm3 = nn.LSTM(input_size=64, hidden_size=64, dropout=dropout, batch_first=True)
+        self.linear3 = nn.Linear(64, 64)
+        self.linear4 = nn.Linear(64, 4)
+
+    def forward(self, x):
+        x, _, _ = self.lstm1(x)
+        x = self.linear1(x)
+        x = F.dropout(x, p=self.dropout)
+        x = F.relu(x)
+
+        x, _, _ = self.lstm2(x)
+        x = self.linear2(x)
+        x = F.dropout(x, p=self.dropout)
+        x = F.relu(x)
+
+        x, _, _ = self.lstm3(x)
+        x = self.linear3(x)
+        x = F.dropout(x, p=self.dropout)
+        x = F.relu(x)
+
+        #  take only time step of x
+        # x should be size (B, seq, 64)
+        x = x[:, -1, :]
+
+        x = self.linear4(x)
+
+        return x

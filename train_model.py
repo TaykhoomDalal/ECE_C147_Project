@@ -2,7 +2,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 from utils import parse_args_with_config, load_data
-from datasets import NpDataset
+from datasets import NpDataset, SequentialNpDataset
 import models
 from torch.utils.tensorboard import SummaryWriter
 import time
@@ -61,13 +61,29 @@ def main():
         transform_train = sample
         transform_test = sample
 
+    # perform temporal averaging to offset noise
+    if args.temp_ds_wnd > 1:
+        _, seq_len, n_features = data['X_train_valid'].shape
+        new_seq_len = int(seq_len // args.temp_ds_wnd)
+        data['X_train_valid'] = data['X_train_valid'].reshape(-1, new_seq_len, args.temp_ds_wnd, n_features)
+        data['X_train_valid'] = np.sum(data['X_train_valid'], axis=2)
+        data['X_test'] = data['X_test'].reshape(-1, new_seq_len, args.temp_ds_wnd, n_features)
+        data['X_test'] = np.sum(data['X_test'], axis=2)
+
+
     # create target to index mapping
     unique_targets = np.unique(data['y_train_valid'])
     offset = np.min(unique_targets)
 
-    train_dataset = NpDataset(data['X_train_valid'], data['y_train_valid'] - offset, transform=transform_train,
-                              store_as_tensor=True)
-    test_dataset = NpDataset(data['X_test'], data['y_test'] - offset, transform=transform_test, store_as_tensor=True)
+    # scale targets
+    data['y_train_valid'] = data['y_train_valid'] - offset
+    data['y_test'] = data['y_test'] - offset
+
+    # use sequential datasets
+    train_dataset = SequentialNpDataset(data['X_train_valid'], data['y_train_valid'], args.seq_len, args.stride,
+                                        transform=transform_train, store_as_tensor=True)
+    test_dataset = SequentialNpDataset(data['X_test'], data['y_test'], args.seq_len, args.stride,
+                                       transform=transform_test, store_as_tensor=True)
 
     # dataloaders
     train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers,
@@ -88,6 +104,8 @@ def main():
     if args.optimizer == 'sgd':
         optimizer = torch.optim.SGD(model.parameters(), lr=args.learning_rate, momentum=args.momentum,
                                     weight_decay=args.l2_reg)
+    elif args.optimizer == 'adam':
+        optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate, weight_decay=args.l2_reg)
     else:
         raise NotImplementedError("Unknown optimizer")
 

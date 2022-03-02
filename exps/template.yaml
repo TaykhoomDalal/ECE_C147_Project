@@ -18,7 +18,7 @@ epochs: 120
 # run options
 gpu: 0
 no_gpu: false
-model: "SimpleRNN"
+model: "LSTM"
 dataset_root: "data/normalized/"
 num_workers: 4
 no_memory_pinning: false
@@ -28,6 +28,14 @@ as_greyscale: false
 # experimental options
 subsampling: false
 subsample_size: 100
+
+# dataset one-shot preprocessing options
+# size of window to average sequences over
+temp_ds_wnd: 4
+
+# dataset options
+seq_len: 100
+stride: 2
 
 
 # misc options

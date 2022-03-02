@@ -1,1 +1,1 @@
-from .NpDataset import NpDataset
+from .NpDataset import NpDataset, SequentialNpDataset
