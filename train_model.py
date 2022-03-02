@@ -99,7 +99,7 @@ def main():
                              pin_memory=args.pin_memory)
 
     # create model
-    model = models.__dict__[args.model]()
+    model = models.__dict__[args.model](dropout=args.dropout, sequential_targets=args.sequential_targets)
     if device is not None:
         model = model.to(device)
 
