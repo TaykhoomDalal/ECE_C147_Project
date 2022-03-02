@@ -77,7 +77,7 @@ class SequentialNpDataset(Dataset):
         offset = index % self._seqs_per_example
 
         x = self.X[ex, offset*self.stride:(offset*self.stride + self.seq_len)]
-        y = self.y[index]
+        y = self.y[ex]
 
         # optionally transform data
         if self.transform is not None:
