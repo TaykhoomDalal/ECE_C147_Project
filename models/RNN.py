@@ -53,7 +53,7 @@ class SimpleLSTM(nn.Module):
 
 
 class LSTM(nn.Module):
-    def __init__(self, dropout=0, sequential_outputs=True):
+    def __init__(self, dropout=0, sequential_outputs=False):
         """
         A more refined LSTM model.
         """
