@@ -116,7 +116,7 @@ class PreprocessedNpDataset(Dataset):
         self.store_as_tensor = store_as_tensor
         if store_as_tensor:
             self.X = torch.Tensor(X)
-            self.y = torch.Tensor(y)
+            self.y = torch.Tensor(y).long()
         else:
             self.X = X
             self.y = y
