@@ -36,7 +36,7 @@ no_clipping: true
 temp_ds_wnd: 1
 
 # dataset options
-seq_len: 500
+seq_len: 1000
 stride: 1
 sequential_targets: false
 
