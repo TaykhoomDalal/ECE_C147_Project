@@ -83,10 +83,6 @@ class LSTM(nn.Module):
         x = F.dropout(x, p=self.dropout)
         x = F.relu(x)
 
-        #  take only time step of x
-        # x should be size (B, seq, 64)
-        x = x[:, -1, :]
-
         x = self.linear4(x)
 
         return x
