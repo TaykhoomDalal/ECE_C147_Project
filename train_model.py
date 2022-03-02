@@ -66,9 +66,9 @@ def main():
         _, seq_len, n_features = data['X_train_valid'].shape
         new_seq_len = int(seq_len // args.temp_ds_wnd)
         data['X_train_valid'] = data['X_train_valid'].reshape(-1, new_seq_len, args.temp_ds_wnd, n_features)
-        data['X_train_valid'] = np.sum(data['X_train_valid'], axis=2)
+        data['X_train_valid'] = np.sum(data['X_train_valid'], axis=2) / args.temp_ds_wnd
         data['X_test'] = data['X_test'].reshape(-1, new_seq_len, args.temp_ds_wnd, n_features)
-        data['X_test'] = np.sum(data['X_test'], axis=2)
+        data['X_test'] = np.sum(data['X_test'], axis=2) / args.temp_ds_wnd
 
 
     # create target to index mapping
