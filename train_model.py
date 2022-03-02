@@ -43,10 +43,10 @@ def main():
     # datasets
     train_dataset = PreprocessedNpDataset(data['X_train_valid'], data['y_train_valid'], wndsze=args.wndsze,
                                           clipping=not args.no_clipping, sample_size=args.sample_size,
-                                          sample_type=args.sample_type)
+                                          sample_type=args.sample_type, store_as_tensor=True)
     test_dataset = PreprocessedNpDataset(data['X_test'], data['y_test'], wndsze=args.wndsze,
                                           clipping=not args.no_clipping, sample_size=args.sample_size,
-                                          sample_type=args.sample_type)
+                                          sample_type=args.sample_type, store_as_tensor=True)
 
     # dataloaders
     train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers,

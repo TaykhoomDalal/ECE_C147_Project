@@ -47,9 +47,10 @@ class SimpleLSTM(nn.Module):
         self.linear1 = nn.Linear(in_features=50, out_features=4)
 
     def forward(self, x):
-        h0 = torch.zeros(1, len(x), 50).requires_grad_().to(x.device)
-        c0 = torch.zeros(1, len(x), 50).requires_grad_().to(x.device)
-        x, _ = self.lstm1(x, (h0, c0))
+        batch_size = len(x)
+        device = x.device
+        hc = _init_hidden_state(self.lstm1, batch_size, device)
+        x, _ = self.lstm1(x, hc)
         x = x[:, -1, :]
         x = self.linear1(x)
         return x
