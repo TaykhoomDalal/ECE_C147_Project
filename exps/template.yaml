@@ -27,7 +27,7 @@ no_memory_pinning: false
 # experimental options
 no_clipping: false
 wndsze: 2
-sample_type: 'stratified'
+sample_type: 'none'
 sample_size: 125
 
 

@@ -130,7 +130,7 @@ class PreprocessedNpDataset(Dataset):
         # first, clipping
         if clipping:
             N, L, H = self.X.shape
-            self.X = self.X[:, :L // 2, :]
+            self.X = self.X[:, :int(L // 2), :]
 
         # next, temporal averaging
         N, L, H = self.X.shape
