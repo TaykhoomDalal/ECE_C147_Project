@@ -40,8 +40,8 @@ class SimpleLSTM(nn.Module):
         self.linear1 = nn.Linear(in_features=50, out_features=4)
 
     def forward(self, x):
-        h0 = torch.zeros(1, len(x), 50).requires_grad_()
-        c0 = torch.zeros(1, len(x), 50).requires_grad_()
+        h0 = torch.zeros(1, len(x), 50).requires_grad_().to(x.device)
+        c0 = torch.zeros(1, len(x), 50).requires_grad_().to(x.device)
         x, _ = self.lstm1(x, (h0, c0))
         x = x[:, -1, :]
         x = self.linear1(x)
