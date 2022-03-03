@@ -53,7 +53,7 @@ def main():
     test_dataset = PreprocessedNpDataset(data['X_test'], data['y_test'], wndsze=args.wndsze,
                                          clipping=not args.no_clipping, sample_size=args.sample_size,
                                          sample_type=args.sample_type, store_as_tensor=True,
-                                         transform=transform_train)
+                                         transform=transform_test)
 
     # dataloaders
     train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers,
