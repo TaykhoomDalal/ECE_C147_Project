@@ -30,6 +30,9 @@ wndsze: 2
 sample_type: 'none'
 sample_size: 125
 
+# data aug options
+gaussian_eps: 0.1
+
 
 
 # misc options

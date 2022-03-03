@@ -31,6 +31,11 @@ def main():
     transform_train = None
     transform_test = None
 
+    if args.gaussian_eps > 0:
+        def noise(x):
+            return x + torch.randn_like(x) * args.gaussian_eps
+        transform_train = noise
+
     # load dataset
     data = load_data(args.dataset_root)
 
