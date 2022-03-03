@@ -83,3 +83,30 @@ class LSTM(nn.Module):
         x = self.linear(x)
         return x
 
+
+class OneLayerLSTM(nn.Module):
+    def __init__(self, dropout):
+        """
+        A recurrent model with one layer of lstm, and 2 layers of linear.
+        :param dropout: dropout in between layers
+        """
+        super(OneLayerLSTM, self).__init__()
+        self.dropout = dropout
+        self.lstm1 = nn.LSTM(input_size=22, hidden_size=32, dropout=dropout, batch_first=True)
+        self.linear1 = nn.Linear(32, 16)
+        self.bn1 = nn.BatchNorm1d(16)
+        self.linear2 = nn.Linear(16, 4)
+
+    def forward(self, x):
+        batch_size = len(x)
+        device = x.device
+        hc1 = _init_hidden_state(self.lstm1, batch_size, device)
+        x, _ = self.lstm1(x, hc1)
+        x = F.dropout(x, self.dropout)
+        x = x[:, -1, :]
+        x = self.linear1(x)
+        x = self.bn1(x)
+        x = self.linear2(x)
+        return x
+
+
