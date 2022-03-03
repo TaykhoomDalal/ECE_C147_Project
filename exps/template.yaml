@@ -9,12 +9,12 @@ dropout: 0.2
 
 # lr scheduler options
 lr_milestones:
-  - 250
-  - 375
+  - 150
+  - 225
 lr_gamma: 0.1
 
 # training options
-epochs: 500
+epochs: 300
 
 # run options
 gpu: 0
@@ -27,8 +27,8 @@ no_memory_pinning: false
 # experimental options
 no_clipping: false
 wndsze: 10
-sample_type: 'none'
-sample_size: 125
+sample_type: 'random'
+sample_size: 40
 
 # data aug options
 gaussian_eps: 0.25
