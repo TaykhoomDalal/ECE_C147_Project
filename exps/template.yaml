@@ -31,7 +31,7 @@ sample_type: 'none'
 sample_size: 125
 
 # data aug options
-gaussian_eps: 0.1
+gaussian_eps: 0.4
 
 
 
