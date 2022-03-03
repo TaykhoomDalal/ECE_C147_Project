@@ -19,19 +19,19 @@ epochs: 500
 # run options
 gpu: 0
 no_gpu: false
-model: "LSTM"
+model: "OneLayerLSTM"
 dataset_root: "data/normalized/"
 num_workers: 4
 no_memory_pinning: false
 
 # experimental options
 no_clipping: false
-wndsze: 4
+wndsze: 10
 sample_type: 'none'
 sample_size: 125
 
 # data aug options
-gaussian_eps: 0.4
+gaussian_eps: 0.25
 
 
 
