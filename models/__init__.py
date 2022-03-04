@@ -4,3 +4,4 @@ from .RNN import LSTM as lstm
 from .RNN import OneLayerLSTM as onelayerlstm
 from .CNN import SimpleCNN as simplecnn
 from .MLP import OneLayerMLP as onelayermlp
+from .RNN import LinearLSTMLinear as linearlstmlinear
