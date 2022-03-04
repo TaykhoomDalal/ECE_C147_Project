@@ -9,12 +9,12 @@ dropout: 0.0
 
 # lr scheduler options
 lr_milestones:
-  - 150
-  - 225
+  - 250
+  - 375
 lr_gamma: 0.1
 
 # training options
-epochs: 300
+epochs: 500
 
 # run options
 gpu: 0
@@ -32,8 +32,6 @@ sample_size: 40
 
 # data aug options
 gaussian_eps: 0.25
-
-
 
 # misc options
 log_root: "logs/"
