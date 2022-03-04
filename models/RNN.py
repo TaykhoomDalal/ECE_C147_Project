@@ -125,8 +125,8 @@ class LinearLSTMLinear(nn.Module):
         device = x.device
 
         # get min and max
-        x_max = torch.max(x, axis=-1).values
-        x_min = torch.min(x, axis=-1).values
+        x_max = torch.max(x, axis=-1, keepdims=True).values
+        x_min = torch.min(x, axis=-1, keepdims=True).values
         x = self.linear1(x)
         x = F.relu(x)
         x = F.dropout(x, self.dropout)
