@@ -114,11 +114,11 @@ class LinearLSTMLinear(nn.Module):
     def __init__(self, dropout):
         super(LinearLSTMLinear, self).__init__()
         self.dropout = dropout
-        self.linear1 = nn.Linear(22, 16)
-        self.linear2 = nn.Linear(16, 8)
-        self.lstm1 = nn.LSTM(input_size=10, hidden_size=10, batch_first=True)
-        self.linear3 = nn.Linear(10, 8)
-        self.linear4 = nn.Linear(8, 4)
+        self.linear1 = nn.Linear(22, 32)
+        self.linear2 = nn.Linear(32, 32)
+        self.lstm1 = nn.LSTM(input_size=34, hidden_size=32, batch_first=True)
+        self.linear3 = nn.Linear(32, 16)
+        self.linear4 = nn.Linear(16, 4)
 
     def forward(self, x):
         batch_size = len(x)
