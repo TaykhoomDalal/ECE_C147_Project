@@ -110,3 +110,44 @@ class OneLayerLSTM(nn.Module):
         return x
 
 
+class LinearLSTMLinear(nn.Module):
+    def __init__(self, dropout):
+        self.dropout = dropout
+        self.linear1 = nn.Linear(22, 16)
+        self.linear2 = nn.Linear(16, 8)
+        self.lstm1 = nn.LSTM(input_size=10, hidden_size=10, batch_first=True)
+        self.linear3 = nn.Linear(10, 8)
+        self.linear4 = nn.Linear(8, 4)
+
+    def forward(self, x):
+        batch_size = len(x)
+        device = x.device
+
+        # get min and max
+        x_max = torch.max(x, axis=-1).values
+        x_min = torch.min(x, axis=-1).values
+        x = self.linear1(x)
+        x = F.relu(x)
+        x = F.dropout(x, self.dropout)
+        x = self.linear2(x)
+        x = F.relu(x)
+        x = F.dropout(x, self.dropout)
+
+        # concatenate min and max to feed to lstm
+        x = torch.cat([x, x_max, x_min], axis=-1)
+
+        # lstm
+        hc = _init_hidden_state(self.lstm1, batch_size, device)
+        x, _ = self.lstm1(x, hc)
+
+        # grab last time step of lstm
+        x = x[:, -1, :]
+
+        # last 2 linear layers
+        x = F.dropout(x, self.dropout)
+        x = self.linear3(x)
+        x = F.relu(x)
+        x = F.dropout(x, self.dropout)
+        x = self.linear4(x)
+        return x
+
