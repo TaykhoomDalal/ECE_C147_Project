@@ -4,7 +4,7 @@ def gaussian_noise(x, mean, std) -> np.ndarray:
     '''
     Add gaussian noise to the training data
     '''
-    return x + np.random.normal(loc=mean, scale=std, size=X.shape)
+    return x + np.random.normal(loc=mean, scale=std, size=x.shape)
 
 def trim_time(x, start_time, end_time) -> np.ndarray:
     '''
