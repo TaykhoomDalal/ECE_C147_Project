@@ -112,6 +112,7 @@ class OneLayerLSTM(nn.Module):
 
 class LinearLSTMLinear(nn.Module):
     def __init__(self, dropout):
+        super(LinearLSTMLinear, self).__init__()
         self.dropout = dropout
         self.linear1 = nn.Linear(22, 16)
         self.linear2 = nn.Linear(16, 8)
