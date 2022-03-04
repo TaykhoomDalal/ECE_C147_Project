@@ -25,9 +25,9 @@ num_workers: 4
 no_memory_pinning: false
 
 # experimental options
-no_clipping: false
-wndsze: 10
-sample_type: 'random'
+no_clipping: true
+wndsze: 4
+sample_type: 'none'
 sample_size: 40
 
 # data aug options
