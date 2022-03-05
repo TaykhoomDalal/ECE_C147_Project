@@ -11,6 +11,8 @@ from torchvision import transforms
 from utils import load_data
 from torch.utils.data import DataLoader
 from train import train, validate
+import aug
+import preprocessing
 
 
 def main():
@@ -33,6 +35,31 @@ def main():
 
     # load dataset
     data = load_data(args.dataset_root)
+
+    ###################################################################################################################
+    # data augmentation
+    # gaussian noise -> trim to 500 -> subsample every 5 -> concat with spawner output
+    data['X_train_valid'] = aug.gaussian_noise(data['X_train_valid'], mean=.1, std=0.5)
+    data['X_test'] = aug.gaussian_noise(data['X_test'], mean=0.1, std=0.5)
+
+    data['X_train_valid'] = aug.trim_time(data['X_train_valid'], 0, 500)
+    data['X_test'] = aug.trim_time(data['X_test'], 0, 500)
+    
+    data['X_train_valid'] =preprocessing.subsample(data['X_train_valid'], 5)
+    data['X_test'] = preprocessing.subsample(data['X_test'], 5)
+
+    train_spawn = aug.spawner(data['X_train_valid'], data['y_train_valid'])
+    test_spawn = aug.spawner(data['X_test'], data['y_test'])
+
+    # train_warp = aug.permutation(data['X_train_valid'])
+    # test_warp = aug.permutation(data['X_test'])
+
+    result = np.stack((data['X_train_valid'], train_spawn), axis = 1)
+    data['X_train_valid'] = result.reshape(result.shape[0], result.shape[1] * result.shape[2], result.shape[3])
+
+    result = np.stack((data['X_test'], test_spawn), axis = 1)
+    data['X_test'] = result.reshape(result.shape[0], result.shape[1] * result.shape[2], result.shape[3])
+    ###################################################################################################################
 
     # data is channels last by default (n, l, c)
     # conv nets need channels first ie (n, c, l)
@@ -88,11 +115,13 @@ def main():
     if args.optimizer == 'sgd':
         optimizer = torch.optim.SGD(model.parameters(), lr=args.learning_rate, momentum=args.momentum,
                                     weight_decay=args.l2_reg)
+    elif args.optimizer == 'adam':
+        optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
     else:
         raise NotImplementedError("Unknown optimizer")
 
     # lr scheduler
-    lr_scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, args.lr_milestones, args.lr_gamma)
+    # lr_scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, args.lr_milestones, args.lr_gamma)
 
     # train loop stats
     best_val_acc = 0
@@ -106,7 +135,7 @@ def main():
         val_loss, val_acc = validate(model, criterion, test_loader, e, device=device)
 
         # update learning rate
-        lr_scheduler.step()
+        # lr_scheduler.step()
 
         # log stats
         best_val_acc = max(val_acc, best_val_acc)
@@ -115,16 +144,16 @@ def main():
         writer.add_scalar("loss/val", val_loss, e)
         writer.add_scalar("acc/val", val_acc, e)
         writer.add_scalar("acc/val_best", best_val_acc, e)
-        writer.add_scalar("optim/lr", lr_scheduler.get_last_lr()[0], e)
-
+        # writer.add_scalar("optim/lr", lr_scheduler.get_last_lr()[0], e)
+    
     # log hyperparams
     writer.add_hparams({
         "model": args.model,
         "optimizer": args.optimizer,
         "batch_size": args.batch_size,
         "learning_rate": args.learning_rate,
-        "momentum": args.momentum,
-        "l2_reg": args.l2_reg,
+        # "momentum": args.momentum,
+        # "l2_reg": args.l2_reg,
         "epochs": args.epochs
     }, {
         "best_val_acc": best_val_acc
