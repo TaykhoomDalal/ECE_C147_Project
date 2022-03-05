@@ -35,7 +35,7 @@ def main():
 
     if args.gaussian_eps > 0:
         def noise(x):
-            return x + torch.randn_like(x) * args.gaussian_eps
+            return x + np.random.randn(*x.shape) * args.gaussian_eps
         transform_train = noise
 
     # load dataset
