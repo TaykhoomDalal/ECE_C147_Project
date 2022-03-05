@@ -8,7 +8,7 @@ from torch.utils.tensorboard import SummaryWriter
 import time
 import os
 from torchvision import transforms
-from utils import load_data
+from utils import load_data, FuncList
 from torch.utils.data import DataLoader
 from train import train, validate
 
@@ -28,15 +28,13 @@ def main():
     writer = SummaryWriter(os.path.join(args.log_root, log_name))
 
     # transforms and online data augmentation
-    transform_train = None
-    transform_test = None
-
-
+    transform_train = FuncList([])
+    transform_test = FuncList([])
 
     if args.gaussian_eps > 0:
         def noise(x):
             return x + np.random.randn(*x.shape) * args.gaussian_eps
-        transform_train = noise
+        transform_train.append(noise)
 
     # load dataset
     data = load_data(args.dataset_root)
@@ -51,11 +49,11 @@ def main():
     train_dataset = PreprocessedNpDataset(data['X_train_valid'], data['y_train_valid'], wndsze=args.wndsze,
                                           clipping=not args.no_clipping, sample_size=args.sample_size,
                                           sample_type=args.sample_type, store_as_tensor=False,
-                                          transform=transform_train)
+                                          transform=transform_train.apply)
     test_dataset = PreprocessedNpDataset(data['X_test'], data['y_test'], wndsze=args.wndsze,
                                          clipping=not args.no_clipping, sample_size=args.sample_size,
                                          sample_type=args.sample_type, store_as_tensor=False,
-                                         transform=transform_test)
+                                         transform=transform_test.apply)
 
     # dataloaders
     train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers,

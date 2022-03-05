@@ -51,3 +51,22 @@ def parse_args_with_config():
     args = parser.parse_args()
     return args
 
+
+class FuncList:
+    def __init__(self, funcs):
+        """
+        A list of functions to apply to an object.
+
+        :param funcs: a list of funcs.
+        """
+        self.funcs = funcs
+
+    def apply(self, x):
+        for f in self.funcs:
+            x = f(x)
+        return x
+
+    def append(self, f):
+        self.funcs.append(f)
+
+
