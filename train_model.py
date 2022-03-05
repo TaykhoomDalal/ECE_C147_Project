@@ -34,7 +34,11 @@ def main():
 
     # optional time warp
     if args.time_warp:
-        transform_train.append(aug.time_warp)
+        def tw(x):
+            x = np.expand_dims(x, axis=0)
+            x = aug.time_warp(x, args.time_warp_sigma, args.time_warp_knot)
+            x = x[0]
+        transform_train.append(tw)
 
     if args.gaussian_eps > 0:
         def noise(x):
