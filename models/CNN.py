@@ -1,3 +1,4 @@
+from re import X
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -30,7 +31,6 @@ class BasicBlock(nn.Module):
         out = self.bn2(out) + x
         out = F.relu(out)
         return out
-
 
 class SimpleCNN(nn.Module):
     def __init__(self, num_classes=4):
@@ -90,4 +90,29 @@ class SimpleCNN(nn.Module):
 
         # head
         x = self.linear(x)
+        return x
+
+class ShallowCNN(nn.Module):
+    def __init__(self, num_classes=4):
+        """
+        CNN + GRU layer
+        """
+        super(ShallowCNN, self).__init__()
+        
+        #lr = 5e-4
+        self.conv1d = nn.Conv1d(in_channels=22, out_channels=25, kernel_size=10, stride=1, padding = 0) 
+        self.mxp1d = nn.MaxPool1d(kernel_size=3, stride=3, padding=0)
+        self.drp1 = nn.Dropout(0.5)
+        self.flat1 = nn.Flatten()
+        self.linear1 = nn.Linear(1575, 4) 
+
+    def forward(self, x):
+        
+        # conv -> maxpool -> dropout -> flatten -> linear
+        x = self.conv1d(x)
+        x = self.mxp1d(x)
+        x = self.drp1(x)
+        x = self.flat1(x)
+        x = self.linear1(x)
+
         return x
