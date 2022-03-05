@@ -95,7 +95,7 @@ class SimpleCNN(nn.Module):
 class ShallowCNN(nn.Module):
     def __init__(self, num_classes=4):
         """
-        CNN + GRU layer
+        1 Convolution layer network
         """
         super(ShallowCNN, self).__init__()
         
