@@ -117,8 +117,8 @@ class LinearLSTMLinear(nn.Module):
         self.linear1 = nn.Linear(22, 32)
         self.linear2 = nn.Linear(32, 32)
         self.lstm1 = nn.LSTM(input_size=34, hidden_size=64, num_layers=3, batch_first=True)
-        self.linear3 = nn.Linear(32, 16)
-        self.linear4 = nn.Linear(16, 4)
+        self.linear3 = nn.Linear(64, 32)
+        self.linear4 = nn.Linear(32, 4)
 
     def forward(self, x):
         batch_size = len(x)
