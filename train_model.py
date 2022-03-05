@@ -31,6 +31,8 @@ def main():
     transform_train = None
     transform_test = None
 
+
+
     if args.gaussian_eps > 0:
         def noise(x):
             return x + torch.randn_like(x) * args.gaussian_eps
@@ -48,11 +50,11 @@ def main():
     # datasets
     train_dataset = PreprocessedNpDataset(data['X_train_valid'], data['y_train_valid'], wndsze=args.wndsze,
                                           clipping=not args.no_clipping, sample_size=args.sample_size,
-                                          sample_type=args.sample_type, store_as_tensor=True,
+                                          sample_type=args.sample_type, store_as_tensor=False,
                                           transform=transform_train)
     test_dataset = PreprocessedNpDataset(data['X_test'], data['y_test'], wndsze=args.wndsze,
                                          clipping=not args.no_clipping, sample_size=args.sample_size,
-                                         sample_type=args.sample_type, store_as_tensor=True,
+                                         sample_type=args.sample_type, store_as_tensor=False,
                                          transform=transform_test)
 
     # dataloaders
