@@ -11,6 +11,7 @@ from torchvision import transforms
 from utils import load_data, FuncList
 from torch.utils.data import DataLoader
 from train import train, validate
+import aug
 
 
 def main():
@@ -30,6 +31,10 @@ def main():
     # transforms and online data augmentation
     transform_train = FuncList([])
     transform_test = FuncList([])
+
+    # optional time warp
+    if args.time_warp:
+        transform_train.append(aug.time_warp)
 
     if args.gaussian_eps > 0:
         def noise(x):

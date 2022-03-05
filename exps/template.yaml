@@ -32,6 +32,8 @@ sample_size: 40
 
 # data aug options
 gaussian_eps: 0.25
+time_warp: false
+
 
 # misc options
 log_root: "logs/"
