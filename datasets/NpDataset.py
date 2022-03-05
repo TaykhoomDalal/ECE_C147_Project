@@ -116,10 +116,9 @@ class PreprocessedNpDataset(Dataset):
         self.store_as_tensor = store_as_tensor
         if store_as_tensor:
             self.X = torch.Tensor(X)
-            self.y = torch.Tensor(y).long()
         else:
             self.X = X
-            self.y = y
+        self.y = torch.Tensor(y).long()
         self.wndsze = wndsze
         self.clipping = clipping
         self.sample_size = sample_size
@@ -169,5 +168,5 @@ class PreprocessedNpDataset(Dataset):
         if self.target_transform is not None:
             y = self.target_transform(y)
 
-        return torch.Tensor(x), torch.Tensor(y)
+        return torch.Tensor(x), y
 
