@@ -38,6 +38,7 @@ def main():
             x = np.expand_dims(x, axis=0)
             x = aug.time_warp(x, args.time_warp_sigma, args.time_warp_knot)
             x = x[0]
+            return x
         transform_train.append(tw)
 
     if args.gaussian_eps > 0:
