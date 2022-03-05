@@ -169,5 +169,5 @@ class PreprocessedNpDataset(Dataset):
         if self.target_transform is not None:
             y = self.target_transform(y)
 
-        return torch.Tensor(x), torch.Tensor(y).long()
+        return torch.Tensor(x), torch.Tensor(y)
 
