@@ -32,7 +32,7 @@ def train(model, criterion, optimizer, train_loader, epoch, device=None):
             batch_y = batch_y.to(device)
 
         # forward pass
-        out = model.forward(batch_x)
+        out = model.forward(batch_x, 'train')
         loss = criterion(out, batch_y).mean()
 
         # backward pass
@@ -87,7 +87,7 @@ def validate(model, criterion, test_loader, epoch, device=None):
                 batch_y = batch_y.to(device)
 
             # forward pass
-            out = model.forward(batch_x)
+            out = model.forward(batch_x, 'test')
             loss = criterion(out, batch_y).mean()
 
             # collect stats

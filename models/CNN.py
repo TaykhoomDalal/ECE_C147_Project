@@ -151,10 +151,13 @@ class DeepCNN(nn.Module):
         # self.drp5 = nn.Dropout(0.5)
 
         self.flat1 = nn.Flatten()
-        self.linear1 = nn.Linear(400, 4) 
+        self.lineartrain = nn.Linear(600, 4) 
 
-    def forward(self, x):
-        
+        #test mode
+        self.lineartest = nn.Linear(400, 4)
+
+    def forward(self, x, mode):
+
         # conv -> maxpool -> dropout -> flatten -> linear
         x = self.conv1(x)
         x = self.mxp1(x)
@@ -181,6 +184,10 @@ class DeepCNN(nn.Module):
         # x = self.drp5(x)
 
         x = self.flat1(x)
-        x = self.linear1(x)
+        x = self.lineartrain(x)
+        # if mode == 'test':
+        #     x = self.lineartest(x)
+        # else:
+        #     x = self.lineartrain(x)
 
         return x

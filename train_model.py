@@ -48,16 +48,16 @@ def main():
     data['X_train_valid'] =preprocessing.subsample(data['X_train_valid'], 5)
     data['X_test'] = preprocessing.subsample(data['X_test'], 5)
 
-    train_spawn = aug.wdba(data['X_train_valid'], data['y_train_valid'])
-    test_spawn = aug.wdba(data['X_test'], data['y_test'])
+    train_warp = aug.window_warp(data['X_train_valid'])
+    test_warp = aug.window_warp(data['X_test'])
 
-    # train_warp = aug.permutation(data['X_train_valid'])
-    # test_warp = aug.permutation(data['X_test'])
+    # train_slice = aug.magnitude_warp(data['X_train_valid'])
+    # test_slice = aug.magnitude_warp(data['X_test'])
 
-    result = np.stack((data['X_train_valid'], train_spawn), axis = 1)
+    result = np.stack((data['X_train_valid'], train_warp), axis = 1)
     data['X_train_valid'] = result.reshape(result.shape[0], result.shape[1] * result.shape[2], result.shape[3])
 
-    result = np.stack((data['X_test'], test_spawn), axis = 1)
+    result = np.stack((data['X_test'], test_warp), axis = 1)
     data['X_test'] = result.reshape(result.shape[0], result.shape[1] * result.shape[2], result.shape[3])
     ###################################################################################################################
 
