@@ -48,8 +48,8 @@ def main():
     data['X_train_valid'] =preprocessing.subsample(data['X_train_valid'], 5)
     data['X_test'] = preprocessing.subsample(data['X_test'], 5)
 
-    train_spawn = aug.spawner(data['X_train_valid'], data['y_train_valid'])
-    test_spawn = aug.spawner(data['X_test'], data['y_test'])
+    train_spawn = aug.wdba(data['X_train_valid'], data['y_train_valid'])
+    test_spawn = aug.wdba(data['X_test'], data['y_test'])
 
     # train_warp = aug.permutation(data['X_train_valid'])
     # test_warp = aug.permutation(data['X_test'])
