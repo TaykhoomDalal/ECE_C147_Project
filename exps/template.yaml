@@ -2,7 +2,7 @@
 # optimizer options
 batch_size: 64
 optimizer: 'adam'
-learning_rate: 0.0005
+learning_rate: 0.001
 # momentum: 0.9
 # l2_reg: 0.00001
 
@@ -18,7 +18,7 @@ epochs: 100
 # run options
 gpu: 0
 no_gpu: false
-model: "ShallowCNN"
+model: "DeepCNN"
 dataset_root: "data/normalized/"
 num_workers: 4
 no_memory_pinning: false
