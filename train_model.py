@@ -11,6 +11,8 @@ from torchvision import transforms
 from utils import load_data
 from torch.utils.data import DataLoader
 from train import train, validate
+import aug
+import preprocessing
 
 
 def main():
@@ -33,6 +35,18 @@ def main():
 
     # load dataset
     data = load_data(args.dataset_root)
+
+    xTrainTemp = data['X_train_valid']
+    xTrainTemp = np.swapaxes(xTrainTemp,1,2)
+    yTrainTemp = data['y_train_valid']
+
+    xTestTemp = data['X_test']
+    xTestTemp = np.swapaxes(xTestTemp,1,2)
+    yTestTemp = data['y_test']
+
+    data['X_train_valid'], data['y_train_valid'] = preprocessing.data_prep(xTrainTemp,yTrainTemp,2,2,True)
+    data['X_test'], data['y_test'] = preprocessing.data_prep(xTestTemp,yTestTemp,2,2,True)
+
 
     # data is channels last by default (n, l, c)
     # conv nets need channels first ie (n, c, l)
@@ -88,6 +102,8 @@ def main():
     if args.optimizer == 'sgd':
         optimizer = torch.optim.SGD(model.parameters(), lr=args.learning_rate, momentum=args.momentum,
                                     weight_decay=args.l2_reg)
+    elif args.optimizer == 'adam':
+        optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
     else:
         raise NotImplementedError("Unknown optimizer")
 
@@ -123,8 +139,8 @@ def main():
         "optimizer": args.optimizer,
         "batch_size": args.batch_size,
         "learning_rate": args.learning_rate,
-        "momentum": args.momentum,
-        "l2_reg": args.l2_reg,
+        #"momentum": args.momentum,
+        #"l2_reg": args.l2_reg,
         "epochs": args.epochs
     }, {
         "best_val_acc": best_val_acc
