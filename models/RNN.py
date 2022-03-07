@@ -129,10 +129,10 @@ class LinearLSTMLinear(nn.Module):
         x_min = torch.min(x, axis=-1, keepdims=True).values
         x = self.linear1(x)
         x = F.relu(x)
-        x = F.dropout(x, self.dropout)
+        x = F.dropout(x, self.dropout, training=self.training)
         x = self.linear2(x)
         x = F.relu(x)
-        x = F.dropout(x, self.dropout)
+        x = F.dropout(x, self.dropout, training=self.training)
 
         # concatenate min and max to feed to lstm
         x = torch.cat([x, x_max, x_min], axis=-1)
@@ -145,10 +145,10 @@ class LinearLSTMLinear(nn.Module):
         x = x[:, -1, :]
 
         # last 2 linear layers
-        x = F.dropout(x, self.dropout)
+        x = F.dropout(x, self.dropout, training=self.training)
         x = self.linear3(x)
         x = F.relu(x)
-        x = F.dropout(x, self.dropout)
+        x = F.dropout(x, self.dropout, training=self.training)
         x = self.linear4(x)
         return x
 

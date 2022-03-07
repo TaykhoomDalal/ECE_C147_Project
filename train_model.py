@@ -46,6 +46,14 @@ def main():
             return x + np.random.randn(*x.shape) * args.gaussian_eps
         transform_train.append(noise)
 
+    if args.random_sample:
+        def sample(x):
+            a = np.random.choice(len(x), size=args.sample_size, replace=False)
+            a.sort()
+            return x[a]
+        transform_train.append(sample)
+        transform_test.append(sample)  # not sure about this
+
     # load dataset
     data = load_data(args.dataset_root)
 

@@ -27,14 +27,17 @@ no_memory_pinning: false
 # experimental options
 no_clipping: true
 wndsze: 4
-sample_type: 'none'
-sample_size: 40
 
 # data aug options
 gaussian_eps: 0.25
+
 time_warp: false
 time_warp_sigma: 0.2
 time_warp_knot: 4
+
+random_sample: false
+sample_size: 125
+
 
 
 # misc options
