@@ -5,7 +5,7 @@ optimizer: 'SGD'
 learning_rate: 0.1
 momentum: 0.9
 l2_reg: 0.00001
-dropout: 0.0
+dropout: 0.2
 
 # lr scheduler options
 lr_milestones:

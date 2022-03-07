@@ -66,11 +66,11 @@ def main():
     # datasets
     train_dataset = PreprocessedNpDataset(data['X_train_valid'], data['y_train_valid'], wndsze=args.wndsze,
                                           clipping=not args.no_clipping, sample_size=args.sample_size,
-                                          sample_type=args.sample_type, store_as_tensor=False,
+                                          sample_type='none', store_as_tensor=False,
                                           transform=transform_train.apply)
     test_dataset = PreprocessedNpDataset(data['X_test'], data['y_test'], wndsze=args.wndsze,
                                          clipping=not args.no_clipping, sample_size=args.sample_size,
-                                         sample_type=args.sample_type, store_as_tensor=False,
+                                         sample_type='none', store_as_tensor=False,
                                          transform=transform_test.apply)
 
     # dataloaders
