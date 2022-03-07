@@ -6,3 +6,4 @@ from .CNN import SimpleCNN as simplecnn
 from .MLP import OneLayerMLP as onelayermlp
 from .RNN import LinearLSTMLinear as linearlstmlinear
 from .RNN import SimpleGRU as simplegru
+from .RNN import TwoLayerGRU as twolayergru
