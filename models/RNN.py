@@ -200,3 +200,27 @@ class TwoLayerGRU(nn.Module):
         x = self.linear2(x)
         return x
 
+
+class TwoLayerBigGRU(nn.Module):
+    def __init__(self, dropout):
+        super().__init__()
+
+        self.num_layers = 2
+        self.hidden_size = 64
+
+        self.dropout = dropout
+        self.linear1 = nn.Linear(22, 32)
+        self.gru = nn.GRU(input_size=16, hidden_size=self.hidden_size, num_layers=self.num_layers, batch_first=True)
+        self.linear2 = nn.Linear(64, 4)
+
+    def forward(self, x):
+        batch_size = len(x)
+        device = x.device
+        h0 = torch.zeros(self.num_layers, batch_size, self.hidden_size, requires_grad=True).to(device)
+        x = self.linear1(x)
+        x = F.relu(x)
+        x, _ = self.gru(x, h0)
+        x = x[:, -1, :]
+        x = self.linear2(x)
+        return x
+
