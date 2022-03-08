@@ -8,3 +8,5 @@ from .RNN import LinearLSTMLinear as linearlstmlinear
 from .RNN import SimpleGRU as simplegru
 from .RNN import TwoLayerGRU as twolayergru
 from .RNN import TwoLayerBigGRU as twolayerbiggru
+from. RNN import fourLayerGRU as fourlayergru
+
