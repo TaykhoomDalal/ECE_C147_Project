@@ -210,7 +210,7 @@ class TwoLayerBigGRU(nn.Module):
 
         self.dropout = dropout
         self.linear1 = nn.Linear(22, 32)
-        self.gru = nn.GRU(input_size=16, hidden_size=self.hidden_size, num_layers=self.num_layers, batch_first=True)
+        self.gru = nn.GRU(input_size=32, hidden_size=self.hidden_size, num_layers=self.num_layers, batch_first=True)
         self.linear2 = nn.Linear(64, 4)
 
     def forward(self, x):
