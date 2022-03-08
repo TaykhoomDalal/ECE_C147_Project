@@ -1,3 +1,4 @@
+from re import X
 import numpy as np
 
 def subsample(X, sub=5):
@@ -38,9 +39,9 @@ def normalize(x):
 def standardize(x):
     xStand = np.zeros_like(x)
     #Get Mean and StDev across all channels through trials and time bins
-    trainChannelMean = np.mean(X_train, axis=(-1, -3))
+    trainChannelMean = np.mean(X, axis=(-1, -3))
     trainChannelMean = trainChannelMean.reshape((22,1))
-    trainChannelStd = np.std(X_train, axis=(-1, -3))
+    trainChannelStd = np.std(x, axis=(-1, -3))
     trainChannelStd = trainChannelStd.reshape((22,1))
     # Use prevoius Values to standardize
     # Standardize across each trial
