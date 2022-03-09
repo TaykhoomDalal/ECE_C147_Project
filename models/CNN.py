@@ -124,6 +124,7 @@ class DeepCNN(nn.Module):
         self.conv2 = nn.Conv2d(in_channels = 25,out_channels = 50,kernel_size = (10,1),padding = 'same')
         self.conv3 = nn.Conv2d(in_channels = 50,out_channels = 100,kernel_size = (10,1),padding = 'same')
         self.conv4 = nn.Conv2d(in_channels = 100,out_channels = 200,kernel_size = (10,1),padding = 'same')
+        self.gru = nn.GRU(input_size = 3, hidden_size = 64, num_layers=1, batch_first = True)
         self.bn1 = nn.BatchNorm2d(25)
         self.bn2 = nn.BatchNorm2d(50)
         self.bn3 = nn.BatchNorm2d(100)
@@ -131,7 +132,7 @@ class DeepCNN(nn.Module):
         self.dropout = nn.Dropout(p=0.5)
         self.ELU = nn.ELU()
         self.flatten = nn.Flatten()
-        self.linear1 = nn.Linear(600,4)
+        self.linear1 = nn.Linear(12800,4)
     def forward(self,x):
 
         #print("input X shape: ",x.shape)
@@ -168,112 +169,17 @@ class DeepCNN(nn.Module):
         x = self.bn4(x)
         x = self.dropout(x)
 
+        x = np.squeeze(x)
+        device = x.device
+        
+        # print(x.shape)
+        M = x.shape[0]
+
+        h0 = torch.zeros(self.gru.num_layers, M, self.gru.hidden_size, requires_grad=True).to(device)
+        x, _ = self.gru(x, h0)
         #Flatten
         x = self.flatten(x)
         #print("flatten output: ", x.shape)
         x = self.linear1(x)
 
         return x
-
-class DeepCNNv2(nn.Module):
-    def __init__(self, num_classes=4):
-        """
-        4 Convolution layer network
-        """
-        super(DeepCNNv2, self).__init__()
-        
-        #layer 1
-        self.conv1 = nn.Conv1d(in_channels=22, out_channels=25, kernel_size=10, stride=1, dilation = 2, padding = 'same') 
-        self.mxp1 = nn.MaxPool1d(kernel_size=3, stride=3, padding=0)
-        # self.bn1 = nn.BatchNorm1d(25)
-        self.drp1 = nn.Dropout(0.5)
-
-        #layer 2
-        self.conv2 = nn.Conv1d(in_channels=25, out_channels=50, kernel_size=10, stride=1, dilation = 2, padding = 'same') 
-        self.mxp2 = nn.MaxPool1d(kernel_size=3, stride=3, padding=0)
-        # self.bn2 = nn.BatchNorm1d(50)
-        self.drp2 = nn.Dropout(0.5)
-
-        self.conv3 = nn.Conv1d(in_channels=50, out_channels=100, kernel_size=10, stride=1, dilation = 2, padding = 'same') 
-        self.mxp3 = nn.MaxPool1d(kernel_size=3, stride=3, padding=0)
-        # self.bn3 = nn.BatchNorm1d(100)
-        self.drp3 = nn.Dropout(0.5)
-
-        self.conv4 = nn.Conv1d(in_channels=100, out_channels=200, kernel_size=10, stride=1, dilation = 2, padding = 'same') 
-        self.mxp4 = nn.MaxPool1d(kernel_size=3, stride=3, padding=0)
-        # self.bn4 = nn.BatchNorm1d(200)
-        self.drp4 = nn.Dropout(0.5)
-
-        # self.conv5 = nn.Conv1d(in_channels=200, out_channels=300, kernel_size=10, stride=1, dilation = 2, padding = 'same') 
-        # self.mxp5 = nn.MaxPool1d(kernel_size=3, stride=3, padding=1)
-        # self.drp5 = nn.Dropout(0.5)
-
-        self.flat1 = nn.Flatten()
-        self.lineartrain = nn.Linear(400, 4) 
-
-        #test mode
-        self.lineartest = nn.Linear(600, 4)
-
-    def forward(self, x):
-
-        # conv -> maxpool -> dropout -> flatten -> linear
-        x = self.conv1(x)
-        x = self.mxp1(x)
-        # x = self.bn1(x)
-        x = self.drp1(x)
-
-        x = self.conv2(x)
-        x = self.mxp2(x)
-        # x = self.bn2(x)
-        x = self.drp2(x)
-
-        x = self.conv3(x)
-        x = self.mxp3(x)
-        # x = self.bn3(x)
-        x = self.drp1(x)
-
-        x = self.conv4(x)
-        x = self.mxp4(x)
-        # x = self.bn4(x)
-        x = self.drp4(x)
-
-        # x = self.conv5(x)
-        # x = self.mxp5(x)
-        # x = self.drp5(x)
-
-        x = self.flat1(x)
-        x = self.lineartrain(x)
-        #if mode == 'test':
-        #    x = self.lineartest(x)
-        #else:
-        #    x = self.lineartrain(x)
-
-        return x
-        
-
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
