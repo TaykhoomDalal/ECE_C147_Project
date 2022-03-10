@@ -7,7 +7,6 @@ import models
 from torch.utils.tensorboard import SummaryWriter
 import time
 import os
-from torchvision import transforms
 from utils import load_data
 from torch.utils.data import DataLoader
 from train import train, validate
@@ -30,24 +29,39 @@ def main():
     # transforms and online data augmentation
     transform_train = None
     transform_test = None
-
+    
+    np.random.seed(0)
+    torch.manual_seed(0)
+    
     # load dataset
     data = load_data(args.dataset_root)
-
-    # process / augment the dataset
-    data = augment.augment_data(data)
 
     # data is channels last by default (n, l, c)
     # conv nets need channels first ie (n, c, l)
     # optionally flip channels here
     if args.channels_first:
-        data['X_train_valid'] = np.transpose(data['X_train_valid'], axes=(0, 3, 1, 2))
-        data['X_test'] = np.transpose(data['X_test'], axes=(0, 3, 1, 2))
+        data['X_train_valid'] = np.transpose(data['X_train_valid'], axes=(0, 2, 1))
+        data['X_test'] = np.transpose(data['X_test'], axes=(0, 2, 1))
 
     # optionally reshape the data as a greyscale image
     if args.as_greyscale:
         data['X_train_valid'] = data['X_train_valid'][:, np.newaxis, :, :]
         data['X_test'] = data['X_test'][:, np.newaxis, :, :]
+
+    # process / augment the dataset
+    #augmentation options chosen
+    options = (args.trim, args.maxpool, args.averaging, args.average_size, args.noise, args.subsampling, args.subsample_size, args.reshape)
+    
+    if not args.noise_only:
+        data['X_train_valid'], data['y_train_valid'] = augment.augment_data(data['X_train_valid'], data['y_train_valid'], *options)
+        data['X_test'], data['y_test'] = augment.augment_data(data['X_test'], data['y_test'], *options)
+    else:
+        data['X_train_valid'] += np.random.normal(0.0, 0.5, data['X_train_valid'].shape)
+        data['X_test'] += np.random.normal(0.0, 0.5, data['X_test'].shape)
+
+        if args.reshape:
+            data['X_train_valid'] = np.expand_dims(data['X_train_valid'], axis = 3)
+            data['X_test'] = np.expand_dims(data['X_test'], axis = 3)
 
     # create target to index mapping
     unique_targets = np.unique(data['y_train_valid'])
