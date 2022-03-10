@@ -19,12 +19,10 @@ class ShallowCNN_GRU(nn.Module):
         self.linear1 = nn.Linear(1760,4)
 
     def forward(self,x):
-
-        # x = torch.reshape(x,(x.shape[0],x.shape[1],x.shape[2],1))
-
+        
         ## Conv Pool Block 1
         x = self.conv1(x)
-        x = self.relu(x)
+        x = self.relu1(x)
         x = self.avgpool1(x)
 
         # GRU layer
@@ -79,9 +77,6 @@ class DeepCNN_GRU(nn.Module):
 
 
     def forward(self,x):
-
-        # x = torch.reshape(x,(x.shape[0],x.shape[1],x.shape[2],1))
-
         ## Conv Pool Block 1
         x = self.conv1(x)
         x = self.ELU(x)
