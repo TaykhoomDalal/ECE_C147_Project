@@ -50,18 +50,10 @@ def main():
 
     # process / augment the dataset
     #augmentation options chosen
-    options = (args.trim, args.maxpool, args.averaging, args.average_size, args.noise, args.subsampling, args.subsample_size, args.reshape)
+    options = (args.trim, args.maxpool, args.averaging, args.average_size, args.noise, args.subsampling, args.subsample_size, args.reshape, args.separate_noise)
     
-    if not args.noise_only:
-        data['X_train_valid'], data['y_train_valid'] = augment.augment_data(data['X_train_valid'], data['y_train_valid'], *options)
-        data['X_test'], data['y_test'] = augment.augment_data(data['X_test'], data['y_test'], *options)
-    else:
-        data['X_train_valid'] += np.random.normal(0.0, 0.5, data['X_train_valid'].shape)
-        data['X_test'] += np.random.normal(0.0, 0.5, data['X_test'].shape)
-
-        if args.reshape:
-            data['X_train_valid'] = np.expand_dims(data['X_train_valid'], axis = 3)
-            data['X_test'] = np.expand_dims(data['X_test'], axis = 3)
+    data['X_train_valid'], data['y_train_valid'] = augment.augment_data(data['X_train_valid'], data['y_train_valid'], *options)
+    data['X_test'], data['y_test'] = augment.augment_data(data['X_test'], data['y_test'], *options)
 
     # create target to index mapping
     unique_targets = np.unique(data['y_train_valid'])

@@ -1,6 +1,7 @@
 import numpy as np
 
-def augment_data(X, y, trim = True, maxpool = True, averaging = True, average = 2, noise = True, sub_sampling = True, sub_sample = 2, reshape = True):
+def augment_data(X, y, trim = True, maxpool = True, averaging = True, average = 2, 
+                noise = True, sub_sampling = True, sub_sample = 2, reshape = True, separate_noise = True):
     # data augmentation
     X_tot = X
     y_tot = y
@@ -9,6 +10,12 @@ def augment_data(X, y, trim = True, maxpool = True, averaging = True, average = 
         # trim time steps
         X = X[:, :, 0:500]
     
+    if separate_noise:
+        X_noisy = X + np.random.normal(0.0, 0.5, X.shape)
+
+        X_tot = np.vstack((X_tot, X_noisy))
+        y_tot = np.hstack((y_tot, y))
+
     if maxpool:
         X_tot = np.max(X.reshape(X.shape[0], X.shape[1], -1, sub_sample), axis=3)
     
