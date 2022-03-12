@@ -22,10 +22,10 @@ class SimpleRNN(nn.Module):
         :param num_layers: The number of layers in the RNN
         """
         super(SimpleRNN, self).__init__()
-        self.rnn = nn.RNN(input_size=input_size, hidden_size=hidden_size, num_layers=num_layers, nonlinearity='relu',
+        self.rnn = nn.RNN(input_size=22, hidden_size=10, num_layers=1, nonlinearity='relu',
                           batch_first=True, **kwargs)
-        self.linear = nn.Linear(hidden_size, num_classes)
-        self.bn = nn.BatchNorm1d(hidden_size)
+        self.linear = nn.Linear(10, 4)
+        # self.bn = nn.BatchNorm1d(hidden_size)
 
     def forward(self, x):
         # pass through rnn
