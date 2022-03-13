@@ -20,6 +20,8 @@ To train a model, run `python train_model.py`.  By default, this will use the co
 All options in the config can be overwritten via command line arguments.  To use a different learning rate for example, use
 `python train_model.py --learning_rate 0.001`.
 
+For the code using the Transformer, please refer to this Colab Notebook: https://colab.research.google.com/drive/1s35NmDpkB3uc22YLW7yCWSr9Xjd7Oejx?usp=sharing
+
 ## Papers on Data Augmentation:
 
 [Data Augmentation for Deep Neural Networks Model in EEG Classification Task: A Review](https://www.frontiersin.org/articles/10.3389/fnhum.2021.765525/full)
