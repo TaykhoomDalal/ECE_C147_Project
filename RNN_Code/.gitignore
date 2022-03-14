@@ -1,0 +1,11 @@
+# project specific stuff
+data/
+__pycache__/
+plots/
+logs/
+
+# mac stuff
+.DS_Store
+
+# projects stuff
+.idea

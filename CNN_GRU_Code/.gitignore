@@ -1,0 +1,20 @@
+# Ignore project data files ("these datasets are internal for this class and should not be distributed")
+Taykhoom_Code/data
+
+#ignore the checkpoints
+Taykhoom_Code/.ipynb_checkpoints/
+
+#ignore files I copied from another branch
+Taykhoom_Code/process_data.py
+Taykhoom_Code/utils.py
+# project specific stuff
+data/
+__pycache__/
+plots/
+logs/
+
+# mac stuff
+.DS_Store
+
+# projects stuff
+.idea

@@ -1,0 +1,47 @@
+---
+# optimizer options
+batch_size: 128
+optimizer: 'SGD'
+learning_rate: 0.1
+momentum: 0.9
+l2_reg: 0.00001
+dropout: 0.0
+
+# lr scheduler options
+lr_milestones:
+  - 250
+  - 375
+lr_gamma: 0.1
+
+# training options
+epochs: 500
+
+# run options
+gpu: 0
+no_gpu: false
+model: "OneLayerLSTM"
+dataset_root: "data/normalized/"
+num_workers: 4
+no_memory_pinning: false
+
+# experimental options
+no_clipping: true
+wndsze: 4
+
+# data aug options
+gaussian_eps: 0.25
+
+time_warp: false
+time_warp_sigma: 0.2
+time_warp_knot: 4
+
+random_sample: false
+sample_size: 125
+
+
+
+# misc options
+log_root: "logs/"
+run_name: "template"
+
+
