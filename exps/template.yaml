@@ -2,9 +2,9 @@
 # optimizer options
 batch_size: 64
 optimizer: 'adam'
-learning_rate: 0.01
+learning_rate: 0.001
 momentum: 0.9
-l2_reg: 0.0001
+l2_reg: 0.001
 
 # lr scheduler options
 lr_milestones:
@@ -18,7 +18,7 @@ epochs: 80
 # run options
 gpu: 0
 no_gpu: false
-model: "DeepCNN"
+model: "ShallowCNN"
 dataset_root: "data/"
 num_workers: 4
 no_memory_pinning: false
@@ -33,5 +33,3 @@ subsample_size: 100
 # misc options
 log_root: "logs/"
 run_name: "template"
-
-
