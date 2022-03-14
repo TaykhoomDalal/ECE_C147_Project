@@ -135,46 +135,46 @@ class DeepCNN(nn.Module):
         self.ELU = nn.ELU()
         self.flatten = nn.Flatten()
         # With No Data Augmentaiton
-        self.linear1 = nn.Linear(2400,4)
+        #self.linear1 = nn.Linear(2400,4)
         # With Data Augmentaiton
-        #self.linear1 = nn.Linear(600,4)
+        self.linear1 = nn.Linear(600,4)
     def forward(self,x):
 
         #print("input X shape: ",x.shape)
 
         # With no Data Augmentation: 
-        x = torch.reshape(x,(x.shape[0],x.shape[2],x.shape[1],1))
+        #x = torch.reshape(x,(x.shape[0],x.shape[2],x.shape[1],1))
         # With Data Augmentation
-        #x = torch.reshape(x,(x.shape[0],x.shape[1],x.shape[2],1))
+        x = torch.reshape(x,(x.shape[0],x.shape[1],x.shape[2],1))
 
 
         ## Conv Pool Block 1
         x = self.conv1(x)
         x = self.ELU(x)
         x = self.maxpool1(x)
-       # x = self.bn1(x)
-       # x = self.dropout(x)
+        x = self.bn1(x)
+        x = self.dropout(x)
         
         ## Conv Pool Block 2
         x = self.conv2(x)
         x = self.ELU(x)
         x = self.maxpool1(x)
-        #x = self.bn2(x)
-        #x = self.dropout(x)
+        x = self.bn2(x)
+        x = self.dropout(x)
                
         ## Conv Pool Block 3
         x = self.conv3(x)
         x = self.ELU(x)
         x = self.maxpool1(x)
-        #x = self.bn3(x)
-        #x = self.dropout(x)
+        x = self.bn3(x)
+        x = self.dropout(x)
         
         ## Conv Pool Block 4
         x = self.conv4(x)
         x = self.ELU(x)
         x = self.maxpool1(x)
-        #x = self.bn4(x)
-        #x = self.dropout(x)
+        x = self.bn4(x)
+        x = self.dropout(x)
 
         #Flatten
         x = self.flatten(x)
