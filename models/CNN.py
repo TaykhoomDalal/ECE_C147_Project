@@ -99,18 +99,21 @@ class ShallowCNN(nn.Module):
         self.conv1 = nn.Conv2d(in_channels = 22, out_channels = 40,kernel_size=(25,1))
         self.avgpool1 = nn.AvgPool2d(kernel_size=(75,1),stride=15)
         self.flatten = nn.Flatten()
-        self.linear1 = nn.Linear(2440,4)
+        # With No Data Augmentaiton
+        #self.linear1 = nn.Linear(2400,4)
+        # With Data Augmentaiton
+        self.linear1 = nn.Linear(440,4)
         # Flatten first and do a FCN to have [128,4]
         # torch.reshape(size[0], -1)
 
     def forward(self,x):
-        x = torch.reshape(x,(x.shape[0],x.shape[2],x.shape[1],1))
+        x = torch.reshape(x,(x.shape[0],x.shape[1],x.shape[2],1))
         x = self.conv1(x)
         x = F.relu(x)
         x = self.avgpool1(x)
         x = self.flatten(x)
         x = self.linear1(x)
-        print("reached the end")
+        #print("reached the end")
 
         return x
 
@@ -124,7 +127,6 @@ class DeepCNN(nn.Module):
         self.conv2 = nn.Conv2d(in_channels = 25,out_channels = 50,kernel_size = (10,1),padding = 'same')
         self.conv3 = nn.Conv2d(in_channels = 50,out_channels = 100,kernel_size = (10,1),padding = 'same')
         self.conv4 = nn.Conv2d(in_channels = 100,out_channels = 200,kernel_size = (10,1),padding = 'same')
-        self.gru = nn.GRU(input_size = 3, hidden_size = 64, num_layers=1, batch_first = True)
         self.bn1 = nn.BatchNorm2d(25)
         self.bn2 = nn.BatchNorm2d(50)
         self.bn3 = nn.BatchNorm2d(100)
@@ -132,6 +134,148 @@ class DeepCNN(nn.Module):
         self.dropout = nn.Dropout(p=0.5)
         self.ELU = nn.ELU()
         self.flatten = nn.Flatten()
+        # With No Data Augmentaiton
+        self.linear1 = nn.Linear(2400,4)
+        # With Data Augmentaiton
+        #self.linear1 = nn.Linear(600,4)
+    def forward(self,x):
+
+        #print("input X shape: ",x.shape)
+
+        # With no Data Augmentation: 
+        x = torch.reshape(x,(x.shape[0],x.shape[2],x.shape[1],1))
+        # With Data Augmentation
+        #x = torch.reshape(x,(x.shape[0],x.shape[1],x.shape[2],1))
+
+
+        ## Conv Pool Block 1
+        x = self.conv1(x)
+        x = self.ELU(x)
+        x = self.maxpool1(x)
+       # x = self.bn1(x)
+       # x = self.dropout(x)
+        
+        ## Conv Pool Block 2
+        x = self.conv2(x)
+        x = self.ELU(x)
+        x = self.maxpool1(x)
+        #x = self.bn2(x)
+        #x = self.dropout(x)
+               
+        ## Conv Pool Block 3
+        x = self.conv3(x)
+        x = self.ELU(x)
+        x = self.maxpool1(x)
+        #x = self.bn3(x)
+        #x = self.dropout(x)
+        
+        ## Conv Pool Block 4
+        x = self.conv4(x)
+        x = self.ELU(x)
+        x = self.maxpool1(x)
+        #x = self.bn4(x)
+        #x = self.dropout(x)
+
+        #Flatten
+        x = self.flatten(x)
+        #print("flatten output: ", x.shape)
+        x = self.linear1(x)
+
+        return x
+
+class DeepConvLSTM(nn.Module):
+    def __init__(self):
+        super(DeepConvLSTM, self).__init__()
+        
+        self.conv1 = nn.Conv2d(in_channels = 22, out_channels = 25,kernel_size=(10,1),padding = 'same')
+        self.maxpool1 = nn.MaxPool2d(kernel_size=(3,1),stride = 3)
+        self.conv2 = nn.Conv2d(in_channels = 25,out_channels = 50,kernel_size = (10,1),padding = 'same')
+        self.conv3 = nn.Conv2d(in_channels = 50,out_channels = 100,kernel_size = (10,1),padding = 'same')
+        self.conv4 = nn.Conv2d(in_channels = 100,out_channels = 200,kernel_size = (10,1),padding = 'same')
+        self.bn1 = nn.BatchNorm2d(25)
+        self.bn2 = nn.BatchNorm2d(50)
+        self.bn3 = nn.BatchNorm2d(100)
+        self.bn4 = nn.BatchNorm2d(200)
+        self.dropout = nn.Dropout(p=0.5)
+        self.ELU = nn.ELU()
+        self.flatten = nn.Flatten()
+        self.lstm = nn.LSTM(
+            input_size = 3,
+            hidden_size = 10,
+            batch_first = True,
+        )
+        self.linear1 = nn.Linear(2000,4)
+    def forward(self,x):
+
+        #print("input X shape: ",x.shape)
+
+
+        x = torch.reshape(x,(x.shape[0],x.shape[1],x.shape[2],1))
+
+
+        ## Conv Pool Block 1
+        x = self.conv1(x)
+        x = self.ELU(x)
+        x = self.maxpool1(x)
+        x = self.bn1(x)
+        x = self.dropout(x)
+        
+        ## Conv Pool Block 2
+        x = self.conv2(x)
+        x = self.ELU(x)
+        x = self.maxpool1(x)
+        x = self.bn2(x)
+        x = self.dropout(x)
+               
+        ## Conv Pool Block 3
+        x = self.conv3(x)
+        x = self.ELU(x)
+        x = self.maxpool1(x)
+        x = self.bn3(x)
+        x = self.dropout(x)
+        
+        ## Conv Pool Block 4
+        x = self.conv4(x)
+        x = self.ELU(x)
+        x = self.maxpool1(x)
+        x = self.bn4(x)
+        x = self.dropout(x)
+
+        #Flatten
+        #print("Size before flattening: ", x.shape)
+        x = x.reshape(x.shape[0],x.shape[1],x.shape[2])
+        #print("one less dimension: ", x.shape)
+        x, _ = self.lstm(x)
+        #print("---made it past lstm---")
+        #print("lstm output size: ", x.shape)
+        x = self.flatten(x)
+
+        x = self.linear1(x)
+
+        return x
+
+class DeepConvGRU(nn.Module):
+    def __init__(self):
+        super(DeepConvGRU, self).__init__()
+        
+        self.conv1 = nn.Conv2d(in_channels = 22, out_channels = 25,kernel_size=(10,1),padding = 'same')
+        self.maxpool1 = nn.MaxPool2d(kernel_size=(3,1),stride = 3)
+        self.conv2 = nn.Conv2d(in_channels = 25,out_channels = 50,kernel_size = (10,1),padding = 'same')
+        self.conv3 = nn.Conv2d(in_channels = 50,out_channels = 100,kernel_size = (10,1),padding = 'same')
+        self.conv4 = nn.Conv2d(in_channels = 100,out_channels = 200,kernel_size = (10,1),padding = 'same')
+        self.bn1 = nn.BatchNorm2d(25)
+        self.bn2 = nn.BatchNorm2d(50)
+        self.bn3 = nn.BatchNorm2d(100)
+        self.bn4 = nn.BatchNorm2d(200)
+        self.dropout = nn.Dropout(p=0.5)
+        self.ELU = nn.ELU()
+        self.flatten = nn.Flatten()
+        self.lstm = nn.GRU(
+            input_size = 3,
+            hidden_size = 64,
+            batch_first = True,
+        )
+        #self.linear1 = nn.Linear(2000,4)
         self.linear1 = nn.Linear(12800,4)
     def forward(self,x):
 
@@ -169,17 +313,15 @@ class DeepCNN(nn.Module):
         x = self.bn4(x)
         x = self.dropout(x)
 
-        x = np.squeeze(x)
-        device = x.device
-        
-        # print(x.shape)
-        M = x.shape[0]
-
-        h0 = torch.zeros(self.gru.num_layers, M, self.gru.hidden_size, requires_grad=True).to(device)
-        x, _ = self.gru(x, h0)
         #Flatten
+        #print("Size before flattening: ", x.shape)
+        x = x.reshape(x.shape[0],x.shape[1],x.shape[2])
+        #print("one less dimension: ", x.shape)
+        x, _ = self.lstm(x)
+        #print("---made it past lstm---")
+        #print("lstm output size: ", x.shape)
         x = self.flatten(x)
-        #print("flatten output: ", x.shape)
+
         x = self.linear1(x)
 
         return x
